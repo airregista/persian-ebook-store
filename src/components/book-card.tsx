@@ -4,7 +4,7 @@ import * as React from "react";
 import { Star, Headphones, Heart, BookOpen } from "lucide-react";
 import { formatToman, toPersianDigits } from "@/lib/formatters";
 import type { Book } from "@/types/book";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 

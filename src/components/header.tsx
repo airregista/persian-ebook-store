@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { toPersianDigits } from "@/lib/formatters";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 export interface HeaderProps {
   searchQuery?: string;

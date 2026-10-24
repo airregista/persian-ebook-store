@@ -4,7 +4,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight, Timer, Volume2 } from "lucide-react";
 import { BookCard } from "@/components/book-card";
 import type { Book } from "@/types/book";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 export interface BookShelfProps {
   id?: string;
