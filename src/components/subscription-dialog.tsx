@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 export interface SubscriptionDialogProps {
   open: boolean;
@@ -103,7 +103,7 @@ export function SubscriptionDialog({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-muted-foreground">
             {SHARED_BENEFITS.map((benefit, idx) => (
               <div key={idx} className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
                 <span className="font-medium text-foreground/90">{benefit}</span>
@@ -188,7 +188,7 @@ export function SubscriptionDialog({
         {/* Footer Guarantee Note */}
         <div className="mt-4 text-center">
           <p className="text-[11px] text-muted-foreground flex items-center justify-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+            <ShieldCheck className="w-4 h-4 text-success shrink-0" />
             <span>فعال‌سازی آنی پس از انتخاب + قابل استفاده همزمان در تمامی دستگاه‌ها (موبایل، تبلت و وب)</span>
           </p>
         </div>

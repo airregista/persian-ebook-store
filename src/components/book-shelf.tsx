@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight, Timer, Volume2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/book-card";
 import type { Book } from "@/types/book";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 export interface BookShelfProps {
   id?: string;
@@ -56,7 +57,7 @@ export function BookShelf({
       className={cn(
         "space-y-4 scroll-mt-24 transition-colors",
         isDeals &&
-          "bg-gradient-to-r from-red-500/10 via-rose-500/5 to-amber-500/10 p-5 sm:p-6 rounded-3xl border border-red-500/20",
+          "bg-gradient-to-r from-deal/10 via-destructive/5 to-deal/10 p-5 sm:p-6 rounded-3xl border border-deal/20",
         className
       )}
     >
@@ -72,7 +73,7 @@ export function BookShelf({
               className={cn(
                 "w-2.5 h-6 rounded-full shrink-0",
                 isDeals
-                  ? "bg-red-500"
+                  ? "bg-deal"
                   : variant === "audio"
                   ? "bg-amber-500"
                   : "bg-primary"
@@ -90,7 +91,7 @@ export function BookShelf({
                   className={cn(
                     "text-xs font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1",
                     isDeals
-                      ? "bg-red-500/10 text-red-600 dark:text-red-400"
+                      ? "bg-deal/10 text-deal"
                       : variant === "audio"
                       ? "bg-amber-500/10 text-amber-700 dark:text-amber-300"
                       : "bg-primary/10 text-primary"
@@ -112,33 +113,35 @@ export function BookShelf({
         {/* Right side controls / timers */}
         <div className="flex items-center gap-3 self-end sm:self-center">
           {isDeals && (
-            <div className="inline-flex items-center gap-1.5 bg-background/90 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/50 text-xs font-sans font-bold text-red-600 dark:text-red-400 shadow-xs">
-              <Timer className="w-3.5 h-3.5 animate-pulse text-red-500 shrink-0" />
+            <div className="inline-flex items-center gap-1.5 bg-background/90 px-3 py-1.5 rounded-xl border border-deal/30 text-xs font-sans font-bold text-deal shadow-xs">
+              <Timer className="w-3.5 h-3.5 animate-pulse text-deal shrink-0" />
               <span>فرصت باقی‌مانده:</span>
-              <span className="bg-red-500 text-white px-1.5 py-0.5 rounded font-bold">۰۸</span> :
-              <span className="bg-red-500 text-white px-1.5 py-0.5 rounded font-bold">۴۲</span> :
-              <span className="bg-red-500 text-white px-1.5 py-0.5 rounded font-bold">۱۵</span>
+              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۰۸</span> :
+              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۴۲</span> :
+              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۱۵</span>
             </div>
           )}
 
           {!isGrid && (
             <div className="flex items-center gap-1.5">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="icon-sm"
                 onClick={scrollPrev}
-                className="p-2 rounded-xl bg-card border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-xs cursor-pointer"
                 aria-label="قبلی"
+                className="shadow-xs"
               >
                 <ChevronRight className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="outline"
+                size="icon-sm"
                 onClick={scrollNext}
-                className="p-2 rounded-xl bg-card border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-xs cursor-pointer"
                 aria-label="بعدی"
+                className="shadow-xs"
               >
                 <ChevronLeft className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           )}
         </div>

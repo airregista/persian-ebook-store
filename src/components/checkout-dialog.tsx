@@ -41,7 +41,7 @@ export function CheckoutDialog({
       <DialogContent className="sm:max-w-md p-6 text-center text-foreground border-border bg-card">
         <DialogHeader className="items-center text-center space-y-3">
           {/* Animated Celebration Icon */}
-          <div className="w-16 h-16 rounded-full bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center animate-in zoom-in-75 duration-300">
+          <div className="w-16 h-16 rounded-full bg-success/15 border-2 border-success/30 text-success flex items-center justify-center animate-in zoom-in-75 duration-300">
             <CheckCircle2 className="w-10 h-10" />
           </div>
 
@@ -67,7 +67,7 @@ export function CheckoutDialog({
             <p className="text-[11px] text-muted-foreground truncate">{book.author}</p>
             <div className="flex items-center justify-between pt-1 border-t border-border/50 text-[11px]">
               <span className="text-muted-foreground">مبلغ پرداختی:</span>
-              <span className="font-black text-emerald-600 dark:text-emerald-400">
+              <span className="font-black text-success">
                 {formatToman(book.price)}
               </span>
             </div>
@@ -83,7 +83,7 @@ export function CheckoutDialog({
           <Button
             type="button"
             onClick={handleStartReading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 py-2.5 text-sm cursor-pointer shadow-sm"
+            className="w-full bg-success text-success-foreground hover:bg-success-hover font-bold gap-2 py-2.5 text-sm cursor-pointer shadow-sm"
           >
             {isAudio ? (
               <>

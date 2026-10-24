@@ -28,27 +28,27 @@ interface ThemeConfig {
 const THEME_CONFIG: Record<ReaderTheme, ThemeConfig> = {
   day: {
     name: "روز",
-    bg: "bg-[#ffffff]",
-    text: "text-[#18181b]",
-    headerBg: "bg-[#ffffff]/95",
-    border: "border-zinc-200",
-    mutedText: "text-zinc-500",
-    cardBg: "bg-zinc-50 border-zinc-200",
+    bg: "bg-background",
+    text: "text-foreground",
+    headerBg: "bg-background/95",
+    border: "border-border",
+    mutedText: "text-muted-foreground",
+    cardBg: "bg-zinc-50 border-border",
   },
   sepia: {
     name: "کاغذی",
-    bg: "bg-[#fbf0d9]",
-    text: "text-[#5f4b32]",
-    headerBg: "bg-[#fbf0d9]/95",
-    border: "border-[#ebdcc0]",
-    mutedText: "text-[#8c7456]",
-    cardBg: "bg-[#f4e7cd] border-[#ebdcc0]",
+    bg: "bg-reader-sepia-bg",
+    text: "text-reader-sepia-fg",
+    headerBg: "bg-reader-sepia-bg/95",
+    border: "border-reader-sepia-border",
+    mutedText: "text-reader-sepia-muted",
+    cardBg: "bg-reader-sepia-card border-reader-sepia-border",
   },
   night: {
     name: "شب",
-    bg: "bg-[#141416]",
-    text: "text-[#f4f4f5]",
-    headerBg: "bg-[#141416]/95",
+    bg: "bg-reader-dark-bg",
+    text: "text-reader-dark-fg",
+    headerBg: "bg-reader-dark-bg/95",
     border: "border-zinc-800",
     mutedText: "text-zinc-400",
     cardBg: "bg-zinc-900 border-zinc-800",
@@ -228,34 +228,38 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
               currentTheme.border
             )}
           >
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={() => setFontSize((s) => Math.max(14, s - 2))}
               disabled={fontSize <= 14}
               aria-label="کاهش اندازه قلم (A-)"
               title="کاهش قلم (A-)"
-              className="px-2 sm:px-2.5 py-1 text-xs font-bold hover:bg-black/10 dark:hover:bg-white/10 disabled:opacity-30 cursor-pointer transition-colors"
+              className="text-xs font-bold rounded-none hover:bg-black/10 dark:hover:bg-white/10 disabled:opacity-30 cursor-pointer"
             >
               A-
-            </button>
+            </Button>
             <span
               className={cn(
-                "px-1.5 sm:px-2 text-xs font-sans font-bold border-x",
+                "h-7 px-1.5 sm:px-2 text-xs font-sans font-bold border-x flex items-center justify-center",
                 currentTheme.border
               )}
             >
               {toPersianDigits(fontSize)}
             </span>
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={() => setFontSize((s) => Math.min(26, s + 2))}
               disabled={fontSize >= 26}
               aria-label="افزایش اندازه قلم (A+)"
               title="افزایش قلم (A+)"
-              className="px-2 sm:px-2.5 py-1 text-xs font-bold hover:bg-black/10 dark:hover:bg-white/10 disabled:opacity-30 cursor-pointer transition-colors"
+              className="text-xs font-bold rounded-none hover:bg-black/10 dark:hover:bg-white/10 disabled:opacity-30 cursor-pointer"
             >
               A+
-            </button>
+            </Button>
           </div>
 
           {/* Reading Theme Buttons: روز / کاغذی / شب */}
@@ -265,53 +269,59 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
               currentTheme.border
             )}
           >
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setTheme("day")}
               aria-label="تم روز (سفید)"
               title="تم روز"
               className={cn(
-                "px-2 sm:px-2.5 py-1 rounded text-xs cursor-pointer transition-all flex items-center gap-1",
+                "px-2 sm:px-2.5 text-xs transition-all gap-1 h-7",
                 theme === "day"
-                  ? "bg-white text-zinc-900 font-bold shadow-xs border border-zinc-300"
+                  ? "bg-white text-zinc-900 font-bold shadow-xs border border-zinc-300 hover:bg-white hover:text-zinc-900"
                   : "hover:bg-black/5"
               )}
             >
               <span>روز</span>
               {theme === "day" && <Check className="size-3" />}
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setTheme("sepia")}
               aria-label="تم کاغذی (کرم سپیا)"
               title="تم کاغذی"
               className={cn(
-                "px-2 sm:px-2.5 py-1 rounded text-xs cursor-pointer transition-all flex items-center gap-1",
+                "px-2 sm:px-2.5 text-xs transition-all gap-1 h-7",
                 theme === "sepia"
-                  ? "bg-[#fbf0d9] text-[#5f4b32] font-bold shadow-xs border border-[#ebdcc0]"
+                  ? "bg-reader-sepia-bg text-reader-sepia-fg font-bold shadow-xs border border-reader-sepia-border hover:bg-reader-sepia-bg hover:text-reader-sepia-fg"
                   : "hover:bg-black/5"
               )}
             >
               <span>کاغذی</span>
               {theme === "sepia" && <Check className="size-3" />}
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setTheme("night")}
               aria-label="تم شب (تاریک)"
               title="تم شب"
               className={cn(
-                "px-2 sm:px-2.5 py-1 rounded text-xs cursor-pointer transition-all flex items-center gap-1",
+                "px-2 sm:px-2.5 text-xs transition-all gap-1 h-7",
                 theme === "night"
-                  ? "bg-zinc-800 text-zinc-100 font-bold shadow-xs border border-zinc-700"
+                  ? "bg-zinc-800 text-zinc-100 font-bold shadow-xs border border-zinc-700 hover:bg-zinc-800 hover:text-zinc-100"
                   : "hover:bg-white/10"
               )}
             >
               <span>شب</span>
               {theme === "night" && <Check className="size-3" />}
-            </button>
+            </Button>
           </div>
         </div>
       </header>

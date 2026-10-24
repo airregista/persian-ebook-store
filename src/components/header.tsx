@@ -14,12 +14,29 @@ import {
   Brain,
   Compass,
   Palette,
-  Headphones,
   Sparkles,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Input } from "@/components/ui/input";
 import { toPersianDigits } from "@/lib/formatters";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
+import { CATEGORIES } from "@/lib/constants";
+
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  all: <LayoutGrid className="w-4 h-4 text-primary" />,
+  "story-foreign": <Book className="w-4 h-4 text-primary" />,
+  "story-persian": <Book className="w-4 h-4 text-primary" />,
+  psychology: <Brain className="w-4 h-4 text-primary" />,
+  management: <Palette className="w-4 h-4 text-primary" />,
+  philosophy: <Compass className="w-4 h-4 text-primary" />,
+  history: <Book className="w-4 h-4 text-primary" />,
+  "social-sciences": <Compass className="w-4 h-4 text-primary" />,
+  literature: <Book className="w-4 h-4 text-primary" />,
+  lifestyle: <Heart className="w-4 h-4 text-primary" />,
+  scientific: <Sparkles className="w-4 h-4 text-primary" />,
+  "kid-teen": <Sparkles className="w-4 h-4 text-primary" />,
+  freebooks: <Sparkles className="w-4 h-4" />,
+};
 
 export interface HeaderProps {
   searchQuery?: string;
@@ -155,113 +172,25 @@ export function Header({
                       موضوعات و دسته‌بندی‌ها
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("story-foreign")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Book className="w-4 h-4 text-primary" />
-                      <span>داستان و رمان خارجی</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("story-persian")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Book className="w-4 h-4 text-primary" />
-                      <span>داستان و رمان فارسی</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("psychology")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Brain className="w-4 h-4 text-primary" />
-                      <span>روانشناسی و تحول فردی</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("management")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Palette className="w-4 h-4 text-primary" />
-                      <span>مدیریت و کسب‌وکار</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("philosophy")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Compass className="w-4 h-4 text-primary" />
-                      <span>فلسفه، منطق و اندیشه</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("history")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Book className="w-4 h-4 text-primary" />
-                      <span>تاریخ جهان و ایران</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("social-sciences")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Compass className="w-4 h-4 text-primary" />
-                      <span>جامعه‌شناسی و علوم اجتماعی</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("audio")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 rounded-xl transition-colors font-bold text-right cursor-pointer"
-                    >
-                      <Headphones className="w-4 h-4" />
-                      <span>کتاب صوتی و پادکست</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("literature")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Book className="w-4 h-4 text-primary" />
-                      <span>شعر و ادبیات کلاسیک</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("scientific")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      <span>علمی، فناوری و تکنولوژی</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("kid-teen")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
-                    >
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      <span>کودک و نوجوان</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCategoryClick("freebooks")}
-                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-colors font-bold text-right cursor-pointer"
-                    >
-                      <Sparkles className="w-4 h-4" />
-                      <span>کتاب‌های رایگان</span>
-                    </button>
+                    {CATEGORIES.filter((c) => c.type === "category").map((cat) => {
+                      const isFree = cat.id === "freebooks";
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => handleCategoryClick(cat.id)}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-xl transition-colors text-right cursor-pointer",
+                            isFree
+                              ? "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 font-bold"
+                              : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                          )}
+                        >
+                          {CATEGORY_ICONS[cat.id] ?? <Book className="w-4 h-4 text-primary" />}
+                          <span>{cat.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -270,12 +199,12 @@ export function Header({
             {/* Center: Universal Search Input */}
             <div className="flex-1 max-w-xl relative hidden md:block">
               <div className="relative flex items-center">
-                <input
+                <Input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => onSearchChange?.(e.target.value)}
                   placeholder="جستجوی عنوان کتاب، نویسنده، مترجم، ناشر یا گوینده..."
-                  className="w-full bg-muted/70 hover:bg-muted focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-11 pl-10 py-2.5 rounded-full border border-border/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                  className="h-10 w-full bg-muted/70 hover:bg-muted focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-11 pl-10 py-2.5 rounded-full border border-border/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                 />
                 <Search className="w-4 h-4 text-muted-foreground absolute right-4 pointer-events-none" />
                 {searchQuery && (
@@ -345,12 +274,12 @@ export function Header({
           {/* Mobile Search Row (visible on small screens) */}
           <div className="pb-3 md:hidden">
             <div className="relative flex items-center">
-              <input
+              <Input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange?.(e.target.value)}
                 placeholder="جستجوی کتاب، نویسنده، مترجم..."
-                className="w-full bg-muted/80 focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-10 pl-9 py-2 rounded-xl border border-border/60 focus:border-primary outline-none"
+                className="h-9 w-full bg-muted/80 focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-10 pl-9 py-2 rounded-xl border border-border/60 focus:border-primary outline-none"
               />
               <Search className="w-4 h-4 text-muted-foreground absolute right-3.5 pointer-events-none" />
               {searchQuery && (

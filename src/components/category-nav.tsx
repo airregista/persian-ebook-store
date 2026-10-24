@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { CATEGORIES, CategoryDefinition } from "@/lib/constants";
 
 export interface CategoryNavProps {
   selectedCategory: string;
@@ -29,108 +30,23 @@ export interface CategoryNavProps {
   onScrollToShelf?: (shelfId: string) => void;
 }
 
-interface CategoryItem {
-  id: string;
-  label: string;
-  type?: "category" | "shelf";
-  shelfId?: string;
-  icon?: React.ReactNode;
-}
-
-const CATEGORIES: CategoryItem[] = [
-  {
-    id: "all",
-    label: "همه دسته‌ها",
-    type: "category",
-    icon: <LayoutGrid className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "deals",
-    label: "پیشنهاد شگفت‌انگیز",
-    type: "shelf",
-    shelfId: "shelf-deals",
-    icon: <Percent className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "audio",
-    label: "کتاب‌های صوتی",
-    type: "shelf",
-    shelfId: "shelf-audio",
-    icon: <Headphones className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "story-foreign",
-    label: "داستان و رمان خارجی",
-    type: "category",
-    icon: <BookOpen className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "story-persian",
-    label: "داستان و رمان فارسی",
-    type: "category",
-    icon: <BookOpen className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "psychology",
-    label: "روانشناسی و تحول فردی",
-    type: "category",
-    icon: <Brain className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "management",
-    label: "مدیریت و کسب‌وکار",
-    type: "category",
-    icon: <Briefcase className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "philosophy",
-    label: "فلسفه و اندیشه",
-    type: "category",
-    icon: <Compass className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "history",
-    label: "تاریخ و زندگی‌نامه",
-    type: "category",
-    icon: <Landmark className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "social-sciences",
-    label: "جامعه‌شناسی و علوم اجتماعی",
-    type: "category",
-    icon: <Users className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "literature",
-    label: "شعر و ادبیات کلاسیک",
-    type: "category",
-    icon: <Feather className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "lifestyle",
-    label: "سبک زندگی و سلامت",
-    type: "category",
-    icon: <HeartPulse className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "scientific",
-    label: "علمی و فناوری",
-    type: "category",
-    icon: <Cpu className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "kid-teen",
-    label: "کودک و نوجوان",
-    type: "category",
-    icon: <Smile className="w-3.5 h-3.5" />,
-  },
-  {
-    id: "freebooks",
-    label: "کتاب‌های رایگان",
-    type: "category",
-    icon: <Gift className="w-3.5 h-3.5" />,
-  },
-];
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  all: <LayoutGrid className="w-3.5 h-3.5" />,
+  deals: <Percent className="w-3.5 h-3.5" />,
+  audio: <Headphones className="w-3.5 h-3.5" />,
+  "story-foreign": <BookOpen className="w-3.5 h-3.5" />,
+  "story-persian": <BookOpen className="w-3.5 h-3.5" />,
+  psychology: <Brain className="w-3.5 h-3.5" />,
+  management: <Briefcase className="w-3.5 h-3.5" />,
+  philosophy: <Compass className="w-3.5 h-3.5" />,
+  history: <Landmark className="w-3.5 h-3.5" />,
+  "social-sciences": <Users className="w-3.5 h-3.5" />,
+  literature: <Feather className="w-3.5 h-3.5" />,
+  lifestyle: <HeartPulse className="w-3.5 h-3.5" />,
+  scientific: <Cpu className="w-3.5 h-3.5" />,
+  "kid-teen": <Smile className="w-3.5 h-3.5" />,
+  freebooks: <Gift className="w-3.5 h-3.5" />,
+};
 
 export function CategoryNav({
   selectedCategory,
@@ -139,7 +55,7 @@ export function CategoryNav({
 }: CategoryNavProps) {
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleClick = (item: CategoryItem) => {
+  const handleClick = (item: CategoryDefinition) => {
     if (item.type === "shelf" && item.shelfId && onScrollToShelf) {
       onScrollToShelf(item.shelfId);
     } else {
@@ -202,7 +118,7 @@ export function CategoryNav({
                   !isActive && isFree && "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/50"
                 )}
               >
-                <span className="shrink-0">{item.icon}</span>
+                <span className="shrink-0">{CATEGORY_ICONS[item.id]}</span>
                 <span className="whitespace-nowrap">{item.label}</span>
               </Button>
             );

@@ -34,7 +34,7 @@ import { Card } from "@/components/ui/card";
 import { formatToman, toPersianDigits } from "@/lib/formatters";
 import { getMockBookReviews, MOCK_BOOKS } from "@/lib/mock-books";
 import type { Book, BookReview } from "@/types/book";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 export interface BookDetailDialogProps {
   book: Book | null;

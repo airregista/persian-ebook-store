@@ -4,7 +4,7 @@ import * as React from "react";
 import { Star, Headphones, Heart, BookOpen } from "lucide-react";
 import { formatToman, toPersianDigits } from "@/lib/formatters";
 import type { Book } from "@/types/book";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -118,8 +118,8 @@ export const BookCard = React.memo(function BookCard({
         <div className="space-y-1">
           <div className="flex items-center justify-between text-[11px] text-muted-foreground">
             <span className="truncate max-w-[110px]">{book.categoryName}</span>
-            <span className="flex items-center gap-0.5 font-bold text-amber-500">
-              <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+            <span className="flex items-center gap-0.5 font-bold text-gold">
+              <Star className="h-3 w-3 fill-gold text-gold" />
               <span>{toPersianDigits(book.rating.toFixed(1))}</span>
             </span>
           </div>
@@ -148,15 +148,16 @@ export const BookCard = React.memo(function BookCard({
         </div>
 
         <div className="flex items-center gap-1">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             aria-label="افزودن به علاقه‌مندی‌ها"
             onClick={(e) => {
               e.stopPropagation();
               onToggleWishlist?.(book.id);
             }}
             className={cn(
-              "rounded-lg p-1.5 transition-colors hover:bg-muted",
               isWishlisted
                 ? "text-red-500 hover:text-red-600"
                 : "text-muted-foreground hover:text-red-500"
@@ -168,7 +169,7 @@ export const BookCard = React.memo(function BookCard({
                 isWishlisted && "fill-current"
               )}
             />
-          </button>
+          </Button>
 
           {isPurchased ? (
             <Button
