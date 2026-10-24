@@ -7,10 +7,9 @@ import { toPersianDigits } from "@/lib/formatters";
 export const PLAYBACK_SPEEDS = [0.75, 1, 1.25, 1.5, 2] as const;
 export type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
 
-export interface PlayerContextType {
+export interface PlayerControlsType {
   currentBook: Book | null;
   isPlaying: boolean;
-  currentTime: number;
   duration: number;
   playbackRate: PlaybackSpeed;
   isMuted: boolean;
@@ -23,7 +22,12 @@ export interface PlayerContextType {
   closePlayer: () => void;
 }
 
-const PlayerContext = React.createContext<PlayerContextType | null>(null);
+export interface PlayerContextType extends PlayerControlsType {
+  currentTime: number;
+}
+
+const PlayerContext = React.createContext<PlayerControlsType | null>(null);
+const PlayerTimeContext = React.createContext<number>(0);
 
 /**
  * Parses Persian or standard duration string to seconds, defaulting to 180s (3m).
@@ -108,6 +112,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [isPlaying, playbackRate, duration]);
 
+  const currentTimeRef = React.useRef(0);
+  currentTimeRef.current = currentTime;
+
   const playBook = React.useCallback((book: Book) => {
     const dur = parseDuration(book.duration);
     setCurrentBook(book);
@@ -118,12 +125,12 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   const togglePlay = React.useCallback(() => {
     setIsPlaying((prev) => {
-      if (!prev && currentTime >= duration) {
+      if (!prev && currentTimeRef.current >= duration) {
         setCurrentTime(0);
       }
       return !prev;
     });
-  }, [currentTime, duration]);
+  }, [duration]);
 
   const seek = React.useCallback(
     (time: number) => {
@@ -157,11 +164,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     setCurrentTime(0);
   }, []);
 
-  const value = React.useMemo<PlayerContextType>(
+  const value = React.useMemo<PlayerControlsType>(
     () => ({
       currentBook,
       isPlaying,
-      currentTime,
       duration,
       playbackRate,
       isMuted,
@@ -176,7 +182,6 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     [
       currentBook,
       isPlaying,
-      currentTime,
       duration,
       playbackRate,
       isMuted,
@@ -192,15 +197,21 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <PlayerContext.Provider value={value}>
-      {children}
+      <PlayerTimeContext.Provider value={currentTime}>
+        {children}
+      </PlayerTimeContext.Provider>
     </PlayerContext.Provider>
   );
 }
 
-export function usePlayer(): PlayerContextType {
+export function usePlayer(): PlayerControlsType {
   const context = React.useContext(PlayerContext);
   if (!context) {
     throw new Error("usePlayer must be used within a PlayerProvider");
   }
   return context;
+}
+
+export function usePlayerTime(): number {
+  return React.useContext(PlayerTimeContext);
 }

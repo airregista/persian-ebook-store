@@ -153,9 +153,26 @@ export default function Home() {
     }, 50);
   };
 
+  // Deferred search query for smooth 60fps typing
+  const deferredQuery = React.useDeferredValue(searchQuery);
+
+  // Pagination states (Option 1: 24 items per batch)
+  const [visibleCatalogCount, setVisibleCatalogCount] = React.useState(24);
+  const [visibleCategoryCount, setVisibleCategoryCount] = React.useState(24);
+  const [visibleSearchCount, setVisibleSearchCount] = React.useState(24);
+
+  // Reset pagination counters on category/query change
+  React.useEffect(() => {
+    setVisibleCategoryCount(24);
+  }, [selectedCategory]);
+
+  React.useEffect(() => {
+    setVisibleSearchCount(24);
+  }, [deferredQuery]);
+
   // Search results
   const searchResults = React.useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
+    const q = deferredQuery.trim().toLowerCase();
     if (!q) return [];
     return books.filter(
       (b) =>
@@ -166,7 +183,12 @@ export default function Home() {
         b.publisher.toLowerCase().includes(q) ||
         b.categoryName.toLowerCase().includes(q)
     );
-  }, [books, searchQuery]);
+  }, [books, deferredQuery]);
+
+  const visibleSearchResults = React.useMemo(
+    () => searchResults.slice(0, visibleSearchCount),
+    [searchResults, visibleSearchCount]
+  );
 
   // Filtered books by category
   const categoryBooks = React.useMemo(() => {
@@ -184,23 +206,33 @@ export default function Home() {
     );
   }, [books, selectedCategory]);
 
-  // Shelf data
+  const visibleCategoryBooks = React.useMemo(
+    () => categoryBooks.slice(0, visibleCategoryCount),
+    [categoryBooks, visibleCategoryCount]
+  );
+
+  // Shelf data (curated and sliced to 15 items for smooth scrolling and instant DOM rendering)
   const bestsellers = React.useMemo(
-    () => books.filter((b) => b.badge?.includes("پرفروش") || b.rating >= 4.7),
+    () => books.filter((b) => b.badge?.includes("پرفروش") || b.rating >= 4.7).slice(0, 15),
     [books]
   );
 
   const specialDeals = React.useMemo(
-    () => books.filter((b) => b.isSpecialDeal || b.discountPercent > 0),
+    () => books.filter((b) => b.isSpecialDeal || b.discountPercent > 0).slice(0, 15),
     [books]
   );
 
   const audioBooks = React.useMemo(
     () =>
-      books.filter(
-        (b) => b.type === "audio" || (b.duration && b.duration !== "صوتی ندارد")
-      ),
+      books
+        .filter((b) => b.type === "audio" || (b.duration && b.duration !== "صوتی ندارد"))
+        .slice(0, 15),
     [books]
+  );
+
+  const visibleCatalogBooks = React.useMemo(
+    () => books.slice(0, visibleCatalogCount),
+    [books, visibleCatalogCount]
   );
 
   const isSearchActive = searchQuery.trim().length > 0;
@@ -255,19 +287,38 @@ export default function Home() {
             </div>
 
             {searchResults.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
-                {searchResults.map((book) => (
-                  <BookCard
-                    key={book.id}
-                    book={book}
-                    variant="standard"
-                    onSelectBook={handleSelectBook}
-                    isWishlisted={isWishlisted(book.id)}
-                    isPurchased={isPurchased(book.id)}
-                    onToggleWishlist={toggleWishlist}
-                    onQuickAction={handleQuickAction}
-                  />
-                ))}
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
+                  {visibleSearchResults.map((book) => (
+                    <BookCard
+                      key={book.id}
+                      book={book}
+                      variant="standard"
+                      onSelectBook={handleSelectBook}
+                      isWishlisted={isWishlisted(book.id)}
+                      isPurchased={isPurchased(book.id)}
+                      onToggleWishlist={toggleWishlist}
+                      onQuickAction={handleQuickAction}
+                    />
+                  ))}
+                </div>
+
+                {visibleSearchCount < searchResults.length && (
+                  <div className="flex flex-col items-center justify-center pt-6 pb-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="default"
+                      onClick={() => setVisibleSearchCount((prev) => prev + 24)}
+                      className="px-8 py-2.5 rounded-full font-bold text-xs sm:text-sm border-primary/30 hover:border-primary hover:bg-primary/5 text-primary gap-2 shadow-xs cursor-pointer"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      <span>نمایش نتایج بیشتر ({toPersianDigits(Math.min(24, searchResults.length - visibleSearchCount))} مورد دیگر)</span>
+                    </Button>
+                    <span className="text-[11px] text-muted-foreground">
+                      نمایش {toPersianDigits(visibleSearchResults.length)} از {toPersianDigits(searchResults.length)} عنوان
+                    </span>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-16 text-center space-y-3 bg-muted/40 rounded-3xl border border-dashed border-border p-8">
@@ -332,7 +383,7 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
-                  {categoryBooks.map((book) => (
+                  {visibleCategoryBooks.map((book) => (
                     <BookCard
                       key={book.id}
                       book={book}
@@ -345,6 +396,23 @@ export default function Home() {
                     />
                   ))}
                 </div>
+
+                {visibleCategoryCount < categoryBooks.length && (
+                  <div className="flex flex-col items-center justify-center pt-6 pb-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="default"
+                      onClick={() => setVisibleCategoryCount((prev) => prev + 24)}
+                      className="px-8 py-2.5 rounded-full font-bold text-xs sm:text-sm border-primary/30 hover:border-primary hover:bg-primary/5 text-primary gap-2 shadow-xs cursor-pointer"
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      <span>نمایش کتاب‌های بیشتر ({toPersianDigits(Math.min(24, categoryBooks.length - visibleCategoryCount))} اثر دیگر)</span>
+                    </Button>
+                    <span className="text-[11px] text-muted-foreground">
+                      نمایش {toPersianDigits(visibleCategoryBooks.length)} از {toPersianDigits(categoryBooks.length)} کتاب
+                    </span>
+                  </div>
+                )}
               </section>
             ) : (
               /* All Shelves */
@@ -447,7 +515,7 @@ export default function Home() {
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-5">
-                    {books.map((book) => (
+                    {visibleCatalogBooks.map((book) => (
                       <BookCard
                         key={book.id}
                         book={book}
@@ -460,6 +528,23 @@ export default function Home() {
                       />
                     ))}
                   </div>
+
+                  {visibleCatalogCount < books.length && (
+                    <div className="flex flex-col items-center justify-center pt-6 pb-2 gap-2">
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={() => setVisibleCatalogCount((prev) => prev + 24)}
+                        className="px-8 py-2.5 rounded-full font-bold text-xs sm:text-sm border-primary/30 hover:border-primary hover:bg-primary/5 text-primary gap-2 shadow-xs cursor-pointer"
+                      >
+                        <BookOpen className="w-4 h-4" />
+                        <span>نمایش کتاب‌های بیشتر ({toPersianDigits(Math.min(24, books.length - visibleCatalogCount))} اثر دیگر)</span>
+                      </Button>
+                      <span className="text-[11px] text-muted-foreground">
+                        نمایش {toPersianDigits(visibleCatalogBooks.length)} از {toPersianDigits(books.length)} عنوان کتاب
+                      </span>
+                    </div>
+                  )}
                 </section>
               </>
             )}

@@ -213,7 +213,7 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
           {/* Progress Indicator */}
           <div
             className={cn(
-              "hidden md:flex items-center gap-1 text-xs font-mono select-none",
+              "hidden md:flex items-center gap-1 text-xs font-sans font-bold select-none",
               currentTheme.mutedText
             )}
           >
@@ -240,7 +240,7 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
             </button>
             <span
               className={cn(
-                "px-1.5 sm:px-2 text-xs font-mono border-x font-semibold",
+                "px-1.5 sm:px-2 text-xs font-sans font-bold border-x",
                 currentTheme.border
               )}
             >

@@ -19,7 +19,7 @@ export interface BookCardProps {
   className?: string;
 }
 
-export function BookCard({
+export const BookCard = React.memo(function BookCard({
   book,
   onSelectBook,
   isWishlisted = false,
@@ -204,4 +204,4 @@ export function BookCard({
       </div>
     </div>
   );
-}
+});

@@ -11,7 +11,7 @@ import {
   X,
   Headphones,
 } from "lucide-react";
-import { usePlayer, formatSec } from "@/context/player-context";
+import { usePlayer, usePlayerTime, formatSec } from "@/context/player-context";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { toPersianDigits } from "@/lib/formatters";
@@ -20,7 +20,6 @@ export function AudioPlayer() {
   const {
     currentBook,
     isPlaying,
-    currentTime,
     duration,
     playbackRate,
     isMuted,
@@ -31,6 +30,7 @@ export function AudioPlayer() {
     toggleMute,
     closePlayer,
   } = usePlayer();
+  const currentTime = usePlayerTime();
 
   const [failedBookId, setFailedBookId] = React.useState<string | null>(null);
 
@@ -130,10 +130,10 @@ export function AudioPlayer() {
 
           {/* Progress timeline: Current time, Slider, Duration */}
           <div
-            className="w-full flex items-center gap-2.5 text-xs text-muted-foreground font-mono select-none"
+            className="w-full flex items-center gap-2.5 text-xs text-muted-foreground select-none font-sans"
             dir="ltr"
           >
-            <span className="tabular-nums font-mono text-[11px] w-12 text-right">
+            <span className="tabular-nums font-sans font-bold text-xs w-12 text-right text-foreground">
               {formatSec(currentTime)}
             </span>
             <Slider
@@ -151,7 +151,7 @@ export function AudioPlayer() {
               className="flex-1 cursor-pointer"
               aria-label="تایم‌لاین موقعیت پخش"
             />
-            <span className="tabular-nums font-mono text-[11px] w-12 text-left">
+            <span className="tabular-nums font-sans font-bold text-xs w-12 text-left text-foreground">
               {formatSec(duration)}
             </span>
           </div>
@@ -166,9 +166,9 @@ export function AudioPlayer() {
             onClick={cycleSpeed}
             aria-label={`تغییر سرعت پخش، سرعت فعلی ${toPersianDigits(playbackRate)} برابر`}
             title="تغییر سرعت پخش"
-            className="h-8 px-2 text-xs font-bold rounded-lg cursor-pointer hover:bg-muted transition-colors font-mono"
+            className="h-8 px-2.5 text-xs font-bold rounded-lg cursor-pointer hover:bg-muted transition-colors font-sans"
           >
-            <span>{toPersianDigits(playbackRate)}x</span>
+            <span>{toPersianDigits(playbackRate)} برابر</span>
           </Button>
 
           <Button
