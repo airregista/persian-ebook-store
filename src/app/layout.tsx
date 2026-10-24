@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { PlayerProvider } from "@/context/player-context";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" suppressHydrationWarning className={vazirmatn.variable}>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
+          <PlayerProvider>
+            {children}
+          </PlayerProvider>
           <Toaster position="bottom-left" dir="rtl" />
         </ThemeProvider>
       </body>

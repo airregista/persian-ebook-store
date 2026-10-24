@@ -14,9 +14,12 @@ import { useBookStorage } from "@/hooks/use-book-storage";
 import { MOCK_BOOKS } from "@/lib/mock-books";
 import { toPersianDigits } from "@/lib/formatters";
 import type { Book } from "@/types/book";
-import { Search, X, BookOpen } from "lucide-react";
+import { Search, X, BookOpen, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { AudioPlayer } from "@/components/player/audio-player";
+import { EbookReader } from "@/components/reader/ebook-reader";
+import { usePlayer } from "@/context/player-context";
 
 const CATEGORY_NAMES: Record<string, string> = {
   literature: "ادبیات، داستان و رمان",
@@ -52,6 +55,10 @@ export default function Home() {
 
   const [isLibraryOpen, setIsLibraryOpen] = React.useState(false);
   const [libraryTab, setLibraryTab] = React.useState<"purchased" | "wishlist">("purchased");
+
+  // Audio Player Context & Reader State
+  const { playBook, currentBook } = usePlayer();
+  const [readerBook, setReaderBook] = React.useState<Book | null>(null);
 
   // Fetch updated books from API on mount
   React.useEffect(() => {
@@ -94,21 +101,23 @@ export default function Home() {
 
   const handleOpenReader = (book: Book) => {
     const isAudio = book.type === "audio" || (book.duration && book.duration !== "صوتی ندارد");
-    toast.info(
-      isAudio
-        ? `ورود به پلیر کتاب صوتی «${book.title}»`
-        : `ورود به کتابخوان دیجیتال برای «${book.title}»`,
-      {
-        description: "کتابخوان و پخش صوتی آنلاین در گام بعدی (پلان ۰۰۵) پیاده‌سازی خواهد شد.",
-      }
-    );
+    if (isAudio) {
+      playBook(book);
+      toast.success(`پخش کتاب صوتی «${book.title}» آغاز شد`);
+    } else {
+      setReaderBook(book);
+    }
   };
 
   const handleQuickAction = (id: string) => {
     const book = books.find((b) => b.id === id);
     if (!book) return;
+    const isAudio = book.type === "audio" || (book.duration && book.duration !== "صوتی ندارد");
     if (isPurchased(id)) {
       handleOpenReader(book);
+    } else if (isAudio) {
+      playBook(book);
+      toast.info(`پخش نمونه صوتی «${book.title}»`);
     } else {
       handlePurchaseBook(book);
     }
@@ -170,7 +179,11 @@ export default function Home() {
   const isSearchActive = searchQuery.trim().length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground">
+    <div
+      className={`min-h-screen flex flex-col bg-background text-foreground ${
+        currentBook ? "pb-24" : ""
+      }`}
+    >
       {/* Universal Header */}
       <Header
         searchQuery={searchQuery}
@@ -344,19 +357,51 @@ export default function Home() {
                 />
 
                 {/* Shelf 3: Audiobooks */}
-                <BookShelf
-                  id="shelf-audio"
-                  title="تازه‌ترین کتاب‌های صوتی و روایت‌ها"
-                  subtitle="روایت‌شده توسط گویندگان صاحب‌نام و استودیویی"
-                  badge="کتاب‌های صوتی"
-                  books={audioBooks.length > 0 ? audioBooks : books}
-                  variant="audio"
-                  onSelectBook={handleSelectBook}
-                  wishlistIds={wishlistIds}
-                  purchasedIds={purchasedIds}
-                  onToggleWishlist={toggleWishlist}
-                  onQuickAction={handleQuickAction}
-                />
+                <div className="space-y-4">
+                  {audioBooks.length > 0 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-l from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                          <Headphones className="w-5 h-5" />
+                        </div>
+                        <div className="text-right">
+                          <h3 className="text-sm font-bold text-foreground">
+                            نمونه‌خوان صوتی کتابگرد
+                          </h3>
+                          <p className="text-xs text-muted-foreground">
+                            پیش از خرید، بخش‌هایی از برترین کتاب‌های صوتی را با صدای گویندگان صاحب‌نام بشنوید.
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          playBook(audioBooks[0]);
+                          toast.info(`در حال پخش نمونه صوتی «${audioBooks[0].title}»`);
+                        }}
+                        className="gap-2 text-xs font-bold border-amber-500/40 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 cursor-pointer shrink-0"
+                      >
+                        <Headphones className="w-4 h-4" />
+                        <span>شنیدن نمونه صوتی ({audioBooks[0].title})</span>
+                      </Button>
+                    </div>
+                  )}
+
+                  <BookShelf
+                    id="shelf-audio"
+                    title="تازه‌ترین کتاب‌های صوتی و روایت‌ها"
+                    subtitle="روایت‌شده توسط گویندگان صاحب‌نام و استودیویی"
+                    badge="کتاب‌های صوتی"
+                    books={audioBooks.length > 0 ? audioBooks : books}
+                    variant="audio"
+                    onSelectBook={handleSelectBook}
+                    wishlistIds={wishlistIds}
+                    purchasedIds={purchasedIds}
+                    onToggleWishlist={toggleWishlist}
+                    onQuickAction={handleQuickAction}
+                  />
+                </div>
 
                 {/* Shelf 4: All Catalog Grid */}
                 <section className="space-y-4 pt-4 border-t border-border">
@@ -450,6 +495,17 @@ export default function Home() {
         onPurchaseBook={handlePurchaseBook}
         onRemoveWishlist={toggleWishlist}
       />
+
+      {/* Docked Audio Player */}
+      <AudioPlayer />
+
+      {/* Fullscreen Interactive E-book Reader */}
+      {readerBook && (
+        <EbookReader
+          book={readerBook}
+          onClose={() => setReaderBook(null)}
+        />
+      )}
     </div>
   );
 }
