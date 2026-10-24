@@ -97,7 +97,7 @@ export function Footer({
               <li>
                 <button
                   type="button"
-                  onClick={() => onSelectCategory?.("society")}
+                  onClick={() => onSelectCategory?.("psychology")}
                   className="hover:text-primary transition-colors cursor-pointer"
                 >
                   روانشناسی و موفقیت

@@ -14,6 +14,7 @@ import { SubscriptionDialog } from "@/components/subscription-dialog";
 import { useBookStorage } from "@/hooks/use-book-storage";
 import { MOCK_BOOKS } from "@/lib/mock-books";
 import { toPersianDigits } from "@/lib/formatters";
+import { CATEGORY_NAMES } from "@/lib/constants";
 import type { Book } from "@/types/book";
 import { Search, X, BookOpen, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,23 +22,6 @@ import { toast } from "sonner";
 import { AudioPlayer } from "@/components/player/audio-player";
 import { EbookReader } from "@/components/reader/ebook-reader";
 import { usePlayer } from "@/context/player-context";
-
-const CATEGORY_NAMES: Record<string, string> = {
-  all: "همه دسته‌ها",
-  "story-foreign": "داستان و رمان خارجی",
-  "story-persian": "داستان و رمان فارسی",
-  psychology: "روانشناسی، خودشناسی و رشد فردی",
-  management: "مدیریت، بازاریابی و کسب‌وکار",
-  philosophy: "فلسفه، اندیشه و منطق",
-  history: "تاریخ جهان، ایران و زندگی‌نامه‌ها",
-  "social-sciences": "جامعه‌شناسی، اقتصاد و علوم اجتماعی",
-  audio: "کتاب‌های صوتی و پادکست",
-  literature: "شعر و ادبیات کلاسیک",
-  lifestyle: "سبک زندگی، سلامت و تندرستی",
-  scientific: "دانش، علوم و فناوری",
-  "kid-teen": "کودک و نوجوان",
-  freebooks: "کتاب‌های رایگان و همگانی",
-};
 
 export default function Home() {
   const [books, setBooks] = React.useState<Book[]>(MOCK_BOOKS);
