@@ -208,23 +208,14 @@ export function BookDetailDialog({
 
           {/* Tabs Section - Full-width Top Horizontal Navigation */}
           <Tabs defaultValue="about" className="w-full flex flex-col gap-4 mt-2">
-            <TabsList className="w-full grid grid-cols-3 bg-muted/80 p-1.5 rounded-xl h-auto gap-1 shadow-2xs">
-              <TabsTrigger
-                value="about"
-                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
-              >
+            <TabsList className="w-full grid grid-cols-3 bg-muted p-1 rounded-xl gap-1">
+              <TabsTrigger value="about">
                 درباره کتاب
               </TabsTrigger>
-              <TabsTrigger
-                value="reviews"
-                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
-              >
+              <TabsTrigger value="reviews">
                 نظرات ({toPersianDigits(reviews.length)})
               </TabsTrigger>
-              <TabsTrigger
-                value="similar"
-                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
-              >
+              <TabsTrigger value="similar">
                 کتاب‌های مشابه ({toPersianDigits(similarBooks.length)})
               </TabsTrigger>
             </TabsList>
@@ -262,62 +253,58 @@ export function BookDetailDialog({
                 </Card>
               )}
 
-              {/* Specs Table */}
+              {/* Specs Table - Perfectly Centered Content Cards */}
               <div className="space-y-2.5">
                 <h4 className="text-xs sm:text-sm font-bold text-foreground">مشخصات اثر:</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
-                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
-                    <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-muted-foreground block text-[11px]">ناشر</span>
-                      <span className="font-semibold text-foreground truncate block">{book.publisher}</span>
-                    </div>
+                  <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl">
+                    <Building2 className="w-5 h-5 text-primary/80 shrink-0" />
+                    <span className="text-muted-foreground text-[11px] block">ناشر</span>
+                    <span className="font-bold text-foreground text-xs sm:text-sm truncate max-w-full block">
+                      {book.publisher}
+                    </span>
                   </Card>
 
-                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
-                    <Languages className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-muted-foreground block text-[11px]">زبان</span>
-                      <span className="font-semibold text-foreground">فارسی</span>
-                    </div>
+                  <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl">
+                    <Languages className="w-5 h-5 text-primary/80 shrink-0" />
+                    <span className="text-muted-foreground text-[11px] block">زبان</span>
+                    <span className="font-bold text-foreground text-xs sm:text-sm block">
+                      فارسی
+                    </span>
                   </Card>
 
                   {book.pages ? (
-                    <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
-                      <FileText className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <div className="min-w-0">
-                        <span className="text-muted-foreground block text-[11px]">تعداد صفحات</span>
-                        <span className="font-semibold text-foreground">{toPersianDigits(book.pages)} صفحه</span>
-                      </div>
+                    <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl">
+                      <FileText className="w-5 h-5 text-primary/80 shrink-0" />
+                      <span className="text-muted-foreground text-[11px] block">تعداد صفحات</span>
+                      <span className="font-bold text-foreground text-xs sm:text-sm block">
+                        {toPersianDigits(book.pages)} صفحه
+                      </span>
                     </Card>
                   ) : (
-                    <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
-                      <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <div className="min-w-0">
-                        <span className="text-muted-foreground block text-[11px]">مدت زمان روایت</span>
-                        <span className="font-semibold text-foreground">{book.duration ?? "نامشخص"}</span>
-                      </div>
+                    <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl">
+                      <Clock className="w-5 h-5 text-primary/80 shrink-0" />
+                      <span className="text-muted-foreground text-[11px] block">مدت زمان روایت</span>
+                      <span className="font-bold text-foreground text-xs sm:text-sm block">
+                        {book.duration ?? "نامشخص"}
+                      </span>
                     </Card>
                   )}
 
-                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
-                    <Barcode className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-muted-foreground block text-[11px]">شابک (ISBN)</span>
-                      <span className="font-mono text-foreground font-semibold text-[11px] truncate block">
-                        ۹۷۸-۶۰۰-{toPersianDigits(book.id.padStart(4, "0"))}-۱
-                      </span>
-                    </div>
+                  <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl">
+                    <Barcode className="w-5 h-5 text-primary/80 shrink-0" />
+                    <span className="text-muted-foreground text-[11px] block">شابک (ISBN)</span>
+                    <span className="font-sans font-bold text-foreground text-xs sm:text-sm truncate max-w-full block">
+                      ۹۷۸-۶۰۰-{toPersianDigits(book.id.padStart(4, "0"))}-۱
+                    </span>
                   </Card>
 
-                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5 col-span-2 sm:col-span-2">
-                    <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div className="min-w-0">
-                      <span className="text-muted-foreground block text-[11px]">فرمت عرضه</span>
-                      <span className="font-semibold text-foreground">
-                        {isAudio ? "فایل صوتی استودیویی (MP3)" : "متنی دیجیتال استاندارد (EPUB)"}
-                      </span>
-                    </div>
+                  <Card className="p-3.5 bg-muted/30 border-border/70 flex flex-col items-center justify-center text-center gap-1.5 shadow-2xs rounded-xl col-span-2 sm:col-span-2">
+                    <Calendar className="w-5 h-5 text-primary/80 shrink-0" />
+                    <span className="text-muted-foreground text-[11px] block">فرمت عرضه</span>
+                    <span className="font-bold text-foreground text-xs sm:text-sm truncate max-w-full block">
+                      {isAudio ? "فایل صوتی استودیویی (MP3)" : "متنی دیجیتال استاندارد (EPUB)"}
+                    </span>
                   </Card>
                 </div>
               </div>
