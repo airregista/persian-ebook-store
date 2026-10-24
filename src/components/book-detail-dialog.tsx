@@ -16,6 +16,7 @@ import {
   Clock,
   Sparkles,
   ShoppingBag,
+  X,
 } from "lucide-react";
 import {
   Dialog,
@@ -23,10 +24,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 import { formatToman, toPersianDigits } from "@/lib/formatters";
 import { getMockBookReviews, MOCK_BOOKS } from "@/lib/mock-books";
 import type { Book, BookReview } from "@/types/book";
@@ -78,16 +82,38 @@ export function BookDetailDialog({
     }));
   };
 
+  const handleOpenReader = () => {
+    onOpenChange(false);
+    onOpenReader?.(book);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] sm:max-w-2xl md:max-w-3xl max-h-[92vh] overflow-hidden flex flex-col p-0 gap-0 border-border bg-card shadow-2xl rounded-2xl">
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-border bg-card"
+      >
+        {/* Top-left Close Button avoiding RTL badge overlap */}
+        <DialogClose
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="absolute top-3 left-3 z-20 rounded-full text-muted-foreground hover:text-foreground cursor-pointer"
+              aria-label="بستن پنجره"
+            />
+          }
+        >
+          <X className="w-4 h-4" />
+        </DialogClose>
+
         {/* Scrollable Dialog Body */}
-        <div className="overflow-y-auto p-4 sm:p-6 space-y-6 flex-1 text-right">
+        <div className="overflow-y-auto p-5 sm:p-7 space-y-5 flex-1 text-right">
           {/* Header Section */}
           <DialogHeader className="gap-4 text-right">
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start text-center sm:text-right">
+            <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
               {/* Cover Image */}
-              <div className="relative w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden bg-muted shadow-md shrink-0">
+              <div className="relative w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden bg-muted shadow-md shrink-0 self-center sm:self-start">
                 {!isImgError ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -104,15 +130,15 @@ export function BookDetailDialog({
                   </div>
                 )}
                 {book.badge && (
-                  <span className="absolute top-2 right-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                  <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
                     {book.badge}
-                  </span>
+                  </Badge>
                 )}
               </div>
 
               {/* Header Info */}
-              <div className="flex-1 space-y-2.5">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <div className="flex-1 space-y-2.5 w-full text-right">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary" className="text-xs font-bold">
                     {book.categoryName}
                   </Badge>
@@ -134,15 +160,17 @@ export function BookDetailDialog({
                   )}
                 </div>
 
-                <DialogTitle className="text-xl sm:text-2xl font-black text-foreground leading-tight">
+                <DialogTitle className="text-xl sm:text-2xl font-black text-foreground leading-snug">
                   {book.title}
                 </DialogTitle>
 
-                <DialogDescription className="sr-only">
-                  {book.title} اثر {book.author} - مشخصات، معرفی و دیدگاه‌ها در کتابگرد
+                {/* DialogDescription with simple text only to prevent <p><div> hydration errors */}
+                <DialogDescription className="text-xs text-muted-foreground">
+                  مشخصات، جزئیات و نظرات کتاب {book.title}
                 </DialogDescription>
 
-                <div className="text-sm text-muted-foreground space-y-1">
+                {/* Metadata Details in separate div */}
+                <div className="space-y-1 text-xs sm:text-sm text-muted-foreground pt-1">
                   <div>
                     پدیدآور: <span className="font-semibold text-foreground">{book.author}</span>
                   </div>
@@ -162,11 +190,11 @@ export function BookDetailDialog({
                 </div>
 
                 {/* Rating & Score Distribution */}
-                <div className="flex items-center justify-center sm:justify-start gap-4 pt-1">
-                  <div className="flex items-center gap-1.5 bg-amber-500/10 px-3 py-1 rounded-lg text-amber-600 dark:text-amber-400 font-bold text-sm">
+                <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-1.5 bg-amber-500/10 px-2.5 py-1 rounded-lg text-amber-600 dark:text-amber-400 font-bold text-xs sm:text-sm">
                     <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                     <span>{toPersianDigits(book.rating.toFixed(1))}</span>
-                    <span className="text-xs font-normal text-muted-foreground">از ۵</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">از ۵</span>
                   </div>
                   <span className="text-xs text-muted-foreground">
                     ({toPersianDigits(book.ratingsCount)} نظر ثبت‌شده)
@@ -176,42 +204,46 @@ export function BookDetailDialog({
             </div>
           </DialogHeader>
 
+          <Separator className="my-1 sm:my-2" />
+
           {/* Tabs Section */}
-          <Tabs defaultValue="about" className="w-full mt-4">
-            <TabsList className="w-full justify-start border-b rounded-none bg-transparent p-0 h-auto gap-2 sm:gap-4 overflow-x-auto no-scrollbar">
+          <Tabs defaultValue="about" className="w-full">
+            <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex bg-muted/80 p-1 rounded-xl h-auto">
               <TabsTrigger
                 value="about"
-                className="rounded-none border-b-2 border-transparent data-[active]:border-primary data-[active]:text-primary pb-2.5 pt-1 px-3 text-sm font-bold bg-transparent shadow-none"
+                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
               >
                 درباره کتاب
               </TabsTrigger>
               <TabsTrigger
                 value="reviews"
-                className="rounded-none border-b-2 border-transparent data-[active]:border-primary data-[active]:text-primary pb-2.5 pt-1 px-3 text-sm font-bold bg-transparent shadow-none"
+                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
               >
-                نظرات کاربران ({toPersianDigits(reviews.length)})
+                نظرات ({toPersianDigits(reviews.length)})
               </TabsTrigger>
               <TabsTrigger
                 value="similar"
-                className="rounded-none border-b-2 border-transparent data-[active]:border-primary data-[active]:text-primary pb-2.5 pt-1 px-3 text-sm font-bold bg-transparent shadow-none"
+                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
               >
                 کتاب‌های مشابه ({toPersianDigits(similarBooks.length)})
               </TabsTrigger>
             </TabsList>
 
             {/* TAB 1: About Book */}
-            <TabsContent value="about" className="space-y-5 pt-4">
-              {/* Excerpt Blockquote */}
+            <TabsContent value="about" className="space-y-5 pt-3">
+              {/* Excerpt Blockquote in Card */}
               {book.excerpt && (
-                <div className="relative bg-muted/60 border-r-4 border-primary p-4 rounded-xl text-foreground text-sm italic leading-relaxed">
-                  <Quote className="w-5 h-5 text-primary/40 mb-1 inline-block -rotate-180" />
-                  <p className="inline mr-1">{book.excerpt}</p>
-                </div>
+                <Card className="relative bg-muted/50 border-r-4 border-r-primary border-y-0 border-l-0 rounded-xl p-4 text-foreground text-xs sm:text-sm italic leading-relaxed">
+                  <div className="flex items-start gap-2">
+                    <Quote className="w-4 h-4 text-primary shrink-0 -rotate-180 mt-0.5" />
+                    <p>{book.excerpt}</p>
+                  </div>
+                </Card>
               )}
 
               {/* Synopsis */}
               <div className="space-y-2">
-                <h4 className="text-sm font-bold text-foreground">خلاصه و معرفی کتاب:</h4>
+                <h4 className="text-xs sm:text-sm font-bold text-foreground">خلاصه و معرفی کتاب:</h4>
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed text-justify">
                   {book.synopsis}
                 </p>
@@ -219,7 +251,7 @@ export function BookDetailDialog({
 
               {/* Sample Paragraphs if available */}
               {book.sampleText && book.sampleText.length > 0 && (
-                <div className="space-y-2 bg-card border border-border/80 rounded-xl p-4">
+                <Card className="p-4 bg-card border border-border/80 rounded-xl space-y-2">
                   <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-primary" />
                     <span>برش کوتاهی از متن کتاب:</span>
@@ -227,81 +259,81 @@ export function BookDetailDialog({
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     «{book.sampleText[0]}»
                   </p>
-                </div>
+                </Card>
               )}
 
               {/* Specs Table */}
-              <div className="space-y-2">
-                <h4 className="text-sm font-bold text-foreground">مشخصات اثر:</h4>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+              <div className="space-y-2.5">
+                <h4 className="text-xs sm:text-sm font-bold text-foreground">مشخصات اثر:</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
                     <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-muted-foreground block text-[11px]">ناشر</span>
-                      <span className="font-semibold text-foreground">{book.publisher}</span>
+                      <span className="font-semibold text-foreground truncate block">{book.publisher}</span>
                     </div>
-                  </div>
+                  </Card>
 
-                  <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
                     <Languages className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-muted-foreground block text-[11px]">زبان</span>
                       <span className="font-semibold text-foreground">فارسی</span>
                     </div>
-                  </div>
+                  </Card>
 
                   {book.pages ? (
-                    <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+                    <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
                       <FileText className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <div>
+                      <div className="min-w-0">
                         <span className="text-muted-foreground block text-[11px]">تعداد صفحات</span>
                         <span className="font-semibold text-foreground">{toPersianDigits(book.pages)} صفحه</span>
                       </div>
-                    </div>
+                    </Card>
                   ) : (
-                    <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+                    <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
                       <Clock className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <div>
+                      <div className="min-w-0">
                         <span className="text-muted-foreground block text-[11px]">مدت زمان روایت</span>
                         <span className="font-semibold text-foreground">{book.duration ?? "نامشخص"}</span>
                       </div>
-                    </div>
+                    </Card>
                   )}
 
-                  <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5">
                     <Barcode className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-muted-foreground block text-[11px]">شابک (ISBN)</span>
-                      <span className="font-mono text-foreground font-semibold">
+                      <span className="font-mono text-foreground font-semibold text-[11px] truncate block">
                         ۹۷۸-۶۰۰-{toPersianDigits(book.id.padStart(4, "0"))}-۱
                       </span>
                     </div>
-                  </div>
+                  </Card>
 
-                  <div className="flex items-center gap-2 p-2.5 rounded-lg bg-muted/50 border border-border/50">
+                  <Card className="p-3 bg-muted/40 border-border/60 flex items-center gap-2.5 col-span-2 sm:col-span-2">
                     <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <div>
+                    <div className="min-w-0">
                       <span className="text-muted-foreground block text-[11px]">فرمت عرضه</span>
                       <span className="font-semibold text-foreground">
                         {isAudio ? "فایل صوتی استودیویی (MP3)" : "متنی دیجیتال استاندارد (EPUB)"}
                       </span>
                     </div>
-                  </div>
+                  </Card>
                 </div>
               </div>
             </TabsContent>
 
             {/* TAB 2: User Reviews */}
-            <TabsContent value="reviews" className="space-y-4 pt-4">
+            <TabsContent value="reviews" className="space-y-4 pt-3">
               {reviews.length > 0 ? (
                 <div className="space-y-3">
                   {reviews.map((rev) => {
                     const isLiked = !!likedReviews[rev.id];
                     const likesCount = rev.likes + (isLiked ? 1 : 0);
                     return (
-                      <div
+                      <Card
                         key={rev.id}
-                        className="p-4 rounded-xl bg-card border border-border space-y-2 text-right transition-colors"
+                        className="p-4 bg-card border-border/80 space-y-2 text-right transition-colors"
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -333,21 +365,23 @@ export function BookDetailDialog({
                         </p>
 
                         <div className="flex items-center justify-end pt-1">
-                          <button
+                          <Button
                             type="button"
+                            variant="outline"
+                            size="sm"
                             onClick={() => toggleReviewLike(rev.id)}
                             className={cn(
-                              "inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg border transition-colors cursor-pointer",
+                              "h-7 gap-1.5 text-xs px-2.5 rounded-lg border cursor-pointer",
                               isLiked
                                 ? "bg-primary/10 border-primary text-primary font-semibold"
-                                : "hover:bg-muted text-muted-foreground border-border"
+                                : "text-muted-foreground hover:text-foreground"
                             )}
                           >
                             <ThumbsUp className="w-3.5 h-3.5" />
                             <span>{toPersianDigits(likesCount)}</span>
-                          </button>
+                          </Button>
                         </div>
-                      </div>
+                      </Card>
                     );
                   })}
                 </div>
@@ -361,22 +395,22 @@ export function BookDetailDialog({
             </TabsContent>
 
             {/* TAB 3: Similar Books */}
-            <TabsContent value="similar" className="pt-4">
+            <TabsContent value="similar" className="pt-3">
               {similarBooks.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {similarBooks.map((sim) => (
-                    <div
+                    <Card
                       key={sim.id}
                       onClick={() => onSelectBook?.(sim.id)}
-                      className="group flex sm:flex-col items-center sm:items-start gap-3 p-3 rounded-xl border border-border bg-card hover:border-primary/50 transition-all cursor-pointer text-right"
+                      className="group flex sm:flex-col items-center sm:items-start gap-3 p-3 border-border bg-card hover:border-primary/50 transition-all cursor-pointer text-right"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={sim.cover}
                         alt={sim.title}
-                        className="w-14 sm:w-full aspect-[3/4] object-cover rounded-lg bg-muted"
+                        className="w-14 sm:w-full aspect-[3/4] object-cover rounded-lg bg-muted shrink-0"
                       />
-                      <div className="flex-1 space-y-1 min-w-0">
+                      <div className="flex-1 space-y-1 min-w-0 w-full">
                         <span className="text-[10px] text-muted-foreground block truncate">
                           {sim.categoryName}
                         </span>
@@ -388,7 +422,7 @@ export function BookDetailDialog({
                           {formatToman(sim.price)}
                         </div>
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               ) : (
@@ -401,14 +435,14 @@ export function BookDetailDialog({
         </div>
 
         {/* Action Footer */}
-        <div className="p-4 sm:p-5 border-t border-border bg-muted/40 flex items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-t border-border bg-muted/30 flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3">
           {/* Wishlist Toggle Button */}
           <Button
             type="button"
             variant="outline"
             onClick={() => onToggleWishlist?.(book.id)}
             className={cn(
-              "gap-2 text-xs font-semibold cursor-pointer transition-colors",
+              "w-full sm:w-auto gap-2 text-xs font-semibold cursor-pointer transition-colors justify-center",
               isWishlisted
                 ? "text-red-500 border-red-200 dark:border-red-950 bg-red-500/10 hover:bg-red-500/20"
                 : "text-muted-foreground hover:text-foreground"
@@ -417,7 +451,7 @@ export function BookDetailDialog({
             <Heart
               className={cn("w-4 h-4", isWishlisted && "fill-current text-red-500")}
             />
-            <span className="hidden sm:inline">
+            <span>
               {isWishlisted ? "نشان‌شده در علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
             </span>
           </Button>
@@ -426,11 +460,8 @@ export function BookDetailDialog({
           {isPurchased ? (
             <Button
               type="button"
-              onClick={() => {
-                onOpenChange(false);
-                onOpenReader?.(book);
-              }}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 text-xs sm:text-sm px-5 py-2.5 shadow-sm cursor-pointer"
+              onClick={handleOpenReader}
+              className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold gap-2 text-xs sm:text-sm px-6 py-2.5 shadow-xs cursor-pointer justify-center"
             >
               {isAudio ? (
                 <>
@@ -448,7 +479,7 @@ export function BookDetailDialog({
             <Button
               type="button"
               onClick={() => onPurchase?.(book)}
-              className="bg-teal-600 hover:bg-teal-700 text-white font-bold gap-2 text-xs sm:text-sm px-5 py-2.5 shadow-sm cursor-pointer"
+              className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 font-bold gap-2 text-xs sm:text-sm px-6 py-2.5 shadow-xs cursor-pointer justify-center"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>خرید این کتاب - {formatToman(book.price)}</span>

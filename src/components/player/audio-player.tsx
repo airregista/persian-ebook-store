@@ -133,7 +133,7 @@ export function AudioPlayer() {
             className="w-full flex items-center gap-2.5 text-xs text-muted-foreground font-mono select-none"
             dir="ltr"
           >
-            <span className="tabular-nums w-12 text-right text-[11px] font-sans">
+            <span className="tabular-nums font-mono text-[11px] w-12 text-right">
               {formatSec(currentTime)}
             </span>
             <Slider
@@ -151,7 +151,7 @@ export function AudioPlayer() {
               className="flex-1 cursor-pointer"
               aria-label="تایم‌لاین موقعیت پخش"
             />
-            <span className="tabular-nums w-12 text-left text-[11px] font-sans">
+            <span className="tabular-nums font-mono text-[11px] w-12 text-left">
               {formatSec(duration)}
             </span>
           </div>
