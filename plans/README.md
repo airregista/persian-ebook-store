@@ -24,6 +24,7 @@ Base Commit SHA: `293041b` (Plans 001-007) / `6e1c9c6` (Plans 008-013)
 | [011](011-complete-css-tokens-and-eliminate-hardcoded-colors.md) | تکمیل توکن‌های طراحی در globals.css و حذف رنگ‌های هاردکد شده | P1 | M | 008 | DONE |
 | [012](012-replace-raw-html-elements-with-shadcn-primitives.md) | جایگزینی تگ‌های خام HTML با کامپوننت‌های رسمی Shadcn/UI | P1 | M | 008, 009, 011 | DONE |
 | [013](013-agent-guidelines-and-architectural-rules.md) | تدوین قوانین و اصول راهنمای ایجنت‌ها به زبان انگلیسی در agent.md | P1 | S | — | DONE |
+| [014](014-comprehensive-gitignore-configuration.md) | توسعه و جامع‌سازی فایل gitignore. برای Next.js 16، IDEها، کش بیلد و سیستم‌عامل | P2 | S | — | DONE |
 
 **وضعیت‌ها:** `TODO` \| `IN PROGRESS` \| `DONE` \| `BLOCKED` \| `REJECTED`
 
@@ -38,6 +39,7 @@ Base Commit SHA: `293041b` (Plans 001-007) / `6e1c9c6` (Plans 008-013)
 5. **پلن 011:** اضافه کردن توکن‌های معنایی گمشده (`--success` و تم‌های کتابخوان) به `globals.css` و پاکسازی تمام کدهای رنگی هگز و هاردکد شده.
 6. **پلن 012 گام نهایی:** جایگزینی تمامی ورودی‌ها و دکمه‌های خام HTML با کامپوننت‌های استاندارد شادسن (`Button` و `Input`).
 7. **پلن 013:** استقرار سند راهنمای ایجنت‌ها (`agent.md`) به زبان انگلیسی جهت پایبندی دائمی به استانداردهای فوق.
+8. **پلن 014:** توسعه فایل `.gitignore` جهت جلوگیری از نشت کش بیلد Next.js 16 (`.turbo`)، متادیتای IDEها و فایل‌های موقت OS.
 
 ---
 
