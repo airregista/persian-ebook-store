@@ -10,6 +10,7 @@ import { Footer } from "@/components/footer";
 import { BookDetailDialog } from "@/components/book-detail-dialog";
 import { CheckoutDialog } from "@/components/checkout-dialog";
 import { LibraryDialog } from "@/components/library-dialog";
+import { SubscriptionDialog } from "@/components/subscription-dialog";
 import { useBookStorage } from "@/hooks/use-book-storage";
 import { MOCK_BOOKS } from "@/lib/mock-books";
 import { toPersianDigits } from "@/lib/formatters";
@@ -55,6 +56,8 @@ export default function Home() {
 
   const [isLibraryOpen, setIsLibraryOpen] = React.useState(false);
   const [libraryTab, setLibraryTab] = React.useState<"purchased" | "wishlist">("purchased");
+
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = React.useState(false);
 
   // Audio Player Context & Reader State
   const { playBook, currentBook } = usePlayer();
@@ -197,9 +200,7 @@ export default function Home() {
         libraryCount={purchasedCount}
         onOpenWishlist={handleOpenWishlist}
         onOpenLibrary={handleOpenLibrary}
-        onOpenSubscription={() =>
-          toast.info("جشنواره اشتراک طلایی کتابگرد - تخفیف ۵۰٪")
-        }
+        onOpenSubscription={() => setIsSubscriptionOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -274,9 +275,7 @@ export default function Home() {
               featuredBook={books[0]}
               secondaryFeaturedBook={books[1]}
               onSelectBook={handleSelectBook}
-              onOpenSubscription={() =>
-                toast.info("اشتراک طلایی کتابگرد با ۸۹٬۰۰۰ تومان")
-              }
+              onOpenSubscription={() => setIsSubscriptionOpen(true)}
             />
 
             {/* Category Navigation Bar */}
@@ -452,9 +451,7 @@ export default function Home() {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
         onScrollToShelf={handleScrollToShelf}
-        onOpenSubscription={() =>
-          toast.info("طرح‌های اشتراک بی‌نهایت کتابگرد")
-        }
+        onOpenSubscription={() => setIsSubscriptionOpen(true)}
         onOpenLibrary={handleOpenLibrary}
         onOpenWishlist={handleOpenWishlist}
       />
@@ -494,6 +491,12 @@ export default function Home() {
         onOpenReader={handleOpenReader}
         onPurchaseBook={handlePurchaseBook}
         onRemoveWishlist={toggleWishlist}
+      />
+
+      {/* Subscription Plans Dialog */}
+      <SubscriptionDialog
+        open={isSubscriptionOpen}
+        onOpenChange={setIsSubscriptionOpen}
       />
 
       {/* Docked Audio Player */}

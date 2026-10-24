@@ -81,7 +81,7 @@ export function HeroBanner({
                 className="px-4 sm:px-5 py-2.5 sm:py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-semibold text-xs sm:text-sm transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>تست رایگان اشتراک</span>
+                <span>دریافت اشتراک طلایی</span>
               </button>
             )}
           </div>
@@ -94,10 +94,14 @@ export function HeroBanner({
             tabIndex={0}
             onClick={() => onSelectBook?.(book1Id)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") onSelectBook?.(book1Id);
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelectBook?.(book1Id);
+              }
             }}
             className="w-40 xl:w-44 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl rotate-[-6deg] hover:rotate-0 transition-transform duration-300 border-2 border-white/30 cursor-pointer bg-slate-800"
             title={book1Title}
+            aria-label={`مشاهده کتاب ${book1Title}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -112,10 +116,14 @@ export function HeroBanner({
             tabIndex={0}
             onClick={() => onSelectBook?.(book2Id)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") onSelectBook?.(book2Id);
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelectBook?.(book2Id);
+              }
             }}
             className="w-44 xl:w-48 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl rotate-[3deg] hover:rotate-0 transition-transform duration-300 border-2 border-white/30 cursor-pointer z-10 bg-slate-800"
             title={book2Title}
+            aria-label={`مشاهده کتاب ${book2Title}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

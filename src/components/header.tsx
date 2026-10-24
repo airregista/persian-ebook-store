@@ -47,7 +47,7 @@ export function Header({
   const [isCategoryOpen, setIsCategoryOpen] = React.useState(false);
   const categoryMenuRef = React.useRef<HTMLDivElement>(null);
 
-  // Close flyout when clicking outside
+  // Close flyout when clicking outside or pressing Escape
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -57,8 +57,17 @@ export function Header({
         setIsCategoryOpen(false);
       }
     }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsCategoryOpen(false);
+      }
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const handleCategoryClick = (category: string) => {
@@ -121,6 +130,9 @@ export function Header({
                 <button
                   type="button"
                   onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                  aria-expanded={isCategoryOpen}
+                  aria-haspopup="true"
+                  aria-label="دسته‌بندی موضوعی کتاب‌ها"
                   className={cn(
                     "flex items-center gap-2 px-3.5 py-2 rounded-xl text-foreground/80 hover:text-primary hover:bg-muted font-medium text-sm transition-colors cursor-pointer",
                     isCategoryOpen && "bg-muted text-primary"
@@ -225,6 +237,7 @@ export function Header({
               <button
                 type="button"
                 onClick={onOpenSubscription}
+                aria-label="اشتراک طلایی کتابگرد"
                 className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-full text-xs font-bold shadow-xs shadow-amber-500/20 transition-all hover:scale-105 cursor-pointer"
               >
                 <Crown className="w-4 h-4" />
