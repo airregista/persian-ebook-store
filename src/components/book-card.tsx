@@ -148,15 +148,16 @@ export const BookCard = React.memo(function BookCard({
         </div>
 
         <div className="flex items-center gap-1">
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             aria-label="افزودن به علاقه‌مندی‌ها"
             onClick={(e) => {
               e.stopPropagation();
               onToggleWishlist?.(book.id);
             }}
             className={cn(
-              "rounded-lg p-1.5 transition-colors hover:bg-muted",
               isWishlisted
                 ? "text-red-500 hover:text-red-600"
                 : "text-muted-foreground hover:text-red-500"
@@ -168,7 +169,7 @@ export const BookCard = React.memo(function BookCard({
                 isWishlisted && "fill-current"
               )}
             />
-          </button>
+          </Button>
 
           {isPurchased ? (
             <Button

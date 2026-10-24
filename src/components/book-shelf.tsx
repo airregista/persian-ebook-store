@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight, Timer, Volume2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/book-card";
 import type { Book } from "@/types/book";
 import { cn } from "@/lib/utils";
@@ -123,22 +124,24 @@ export function BookShelf({
 
           {!isGrid && (
             <div className="flex items-center gap-1.5">
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="icon-sm"
                 onClick={scrollPrev}
-                className="p-2 rounded-xl bg-card border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-xs cursor-pointer"
                 aria-label="قبلی"
+                className="shadow-xs"
               >
                 <ChevronRight className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant="outline"
+                size="icon-sm"
                 onClick={scrollNext}
-                className="p-2 rounded-xl bg-card border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-xs cursor-pointer"
                 aria-label="بعدی"
+                className="shadow-xs"
               >
                 <ChevronLeft className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           )}
         </div>

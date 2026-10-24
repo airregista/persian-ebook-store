@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Input } from "@/components/ui/input";
 import { toPersianDigits } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
 import { CATEGORIES } from "@/lib/constants";
@@ -198,12 +199,12 @@ export function Header({
             {/* Center: Universal Search Input */}
             <div className="flex-1 max-w-xl relative hidden md:block">
               <div className="relative flex items-center">
-                <input
+                <Input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => onSearchChange?.(e.target.value)}
                   placeholder="جستجوی عنوان کتاب، نویسنده، مترجم، ناشر یا گوینده..."
-                  className="w-full bg-muted/70 hover:bg-muted focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-11 pl-10 py-2.5 rounded-full border border-border/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                  className="h-10 w-full bg-muted/70 hover:bg-muted focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-11 pl-10 py-2.5 rounded-full border border-border/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                 />
                 <Search className="w-4 h-4 text-muted-foreground absolute right-4 pointer-events-none" />
                 {searchQuery && (
@@ -273,12 +274,12 @@ export function Header({
           {/* Mobile Search Row (visible on small screens) */}
           <div className="pb-3 md:hidden">
             <div className="relative flex items-center">
-              <input
+              <Input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange?.(e.target.value)}
                 placeholder="جستجوی کتاب، نویسنده، مترجم..."
-                className="w-full bg-muted/80 focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-10 pl-9 py-2 rounded-xl border border-border/60 focus:border-primary outline-none"
+                className="h-9 w-full bg-muted/80 focus:bg-background text-sm text-foreground placeholder:text-muted-foreground pr-10 pl-9 py-2 rounded-xl border border-border/60 focus:border-primary outline-none"
               />
               <Search className="w-4 h-4 text-muted-foreground absolute right-3.5 pointer-events-none" />
               {searchQuery && (

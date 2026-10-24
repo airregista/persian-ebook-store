@@ -3,6 +3,7 @@
 import * as React from "react";
 import { BookMarked, Send, ShieldCheck, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export interface FooterProps {
   onSelectCategory?: (category: string) => void;
@@ -179,13 +180,13 @@ export function Footer({
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex">
-                <input
+                <Input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="ایمیل شما..."
                   required
-                  className="w-full text-xs bg-muted border border-border px-3 py-2 rounded-r-xl outline-none focus:border-primary text-foreground"
+                  className="w-full text-xs bg-muted border border-border px-3 py-2 rounded-r-xl rounded-l-none outline-none focus:border-primary text-foreground"
                 />
                 <Button
                   type="submit"
