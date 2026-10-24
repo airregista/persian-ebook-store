@@ -18,6 +18,9 @@
   --accent-foreground: #0f766e;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --success-hover: #059669;
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: #00a389;
@@ -30,6 +33,9 @@
 
   --reader-sepia-bg: #fbf0d9;
   --reader-sepia-fg: #5f4b32;
+  --reader-sepia-border: #ebdcc0;
+  --reader-sepia-muted: #8c7456;
+  --reader-sepia-card: #f4e7cd;
   --reader-dark-bg: #18181b;
   --reader-dark-fg: #e4e4e7;
 }
@@ -52,6 +58,9 @@
   --accent-foreground: #ccfbf1;
   --destructive: #7f1d1d;
   --destructive-foreground: #fef2f2;
+  --success: #059669;
+  --success-foreground: #ecfdf5;
+  --success-hover: #10b981;
   --border: #1e293b;
   --input: #1e293b;
   --ring: #14b8a6;
@@ -60,6 +69,10 @@
   --gold-foreground: #451a03;
   --coral: #ff7043;
   --deal: #f87171;
+
+  --reader-sepia-border: #4a3a25;
+  --reader-sepia-muted: #a89478;
+  --reader-sepia-card: #2e2316;
 }
 
 @theme inline {
@@ -80,6 +93,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-hover: var(--success-hover);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -91,6 +107,9 @@
 
   --color-reader-sepia-bg: var(--reader-sepia-bg);
   --color-reader-sepia-fg: var(--reader-sepia-fg);
+  --color-reader-sepia-border: var(--reader-sepia-border);
+  --color-reader-sepia-muted: var(--reader-sepia-muted);
+  --color-reader-sepia-card: var(--reader-sepia-card);
   --color-reader-dark-bg: var(--reader-dark-bg);
   --color-reader-dark-fg: var(--reader-dark-fg);
 

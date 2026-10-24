@@ -28,27 +28,27 @@ interface ThemeConfig {
 const THEME_CONFIG: Record<ReaderTheme, ThemeConfig> = {
   day: {
     name: "روز",
-    bg: "bg-[#ffffff]",
-    text: "text-[#18181b]",
-    headerBg: "bg-[#ffffff]/95",
-    border: "border-zinc-200",
-    mutedText: "text-zinc-500",
-    cardBg: "bg-zinc-50 border-zinc-200",
+    bg: "bg-background",
+    text: "text-foreground",
+    headerBg: "bg-background/95",
+    border: "border-border",
+    mutedText: "text-muted-foreground",
+    cardBg: "bg-zinc-50 border-border",
   },
   sepia: {
     name: "کاغذی",
-    bg: "bg-[#fbf0d9]",
-    text: "text-[#5f4b32]",
-    headerBg: "bg-[#fbf0d9]/95",
-    border: "border-[#ebdcc0]",
-    mutedText: "text-[#8c7456]",
-    cardBg: "bg-[#f4e7cd] border-[#ebdcc0]",
+    bg: "bg-reader-sepia-bg",
+    text: "text-reader-sepia-fg",
+    headerBg: "bg-reader-sepia-bg/95",
+    border: "border-reader-sepia-border",
+    mutedText: "text-reader-sepia-muted",
+    cardBg: "bg-reader-sepia-card border-reader-sepia-border",
   },
   night: {
     name: "شب",
-    bg: "bg-[#141416]",
-    text: "text-[#f4f4f5]",
-    headerBg: "bg-[#141416]/95",
+    bg: "bg-reader-dark-bg",
+    text: "text-reader-dark-fg",
+    headerBg: "bg-reader-dark-bg/95",
     border: "border-zinc-800",
     mutedText: "text-zinc-400",
     cardBg: "bg-zinc-900 border-zinc-800",
@@ -289,7 +289,7 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
               className={cn(
                 "px-2 sm:px-2.5 py-1 rounded text-xs cursor-pointer transition-all flex items-center gap-1",
                 theme === "sepia"
-                  ? "bg-[#fbf0d9] text-[#5f4b32] font-bold shadow-xs border border-[#ebdcc0]"
+                  ? "bg-reader-sepia-bg text-reader-sepia-fg font-bold shadow-xs border border-reader-sepia-border"
                   : "hover:bg-black/5"
               )}
             >
