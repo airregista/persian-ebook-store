@@ -206,24 +206,24 @@ export function BookDetailDialog({
 
           <Separator className="my-1 sm:my-2" />
 
-          {/* Tabs Section */}
-          <Tabs defaultValue="about" className="w-full">
-            <TabsList className="w-full sm:w-auto grid grid-cols-3 sm:inline-flex bg-muted/80 p-1 rounded-xl h-auto">
+          {/* Tabs Section - Full-width Top Horizontal Navigation */}
+          <Tabs defaultValue="about" className="w-full flex flex-col gap-4 mt-2">
+            <TabsList className="w-full grid grid-cols-3 bg-muted/80 p-1.5 rounded-xl h-auto gap-1 shadow-2xs">
               <TabsTrigger
                 value="about"
-                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
+                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
               >
                 درباره کتاب
               </TabsTrigger>
               <TabsTrigger
                 value="reviews"
-                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
+                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
               >
                 نظرات ({toPersianDigits(reviews.length)})
               </TabsTrigger>
               <TabsTrigger
                 value="similar"
-                className="py-1.5 px-3 text-xs sm:text-sm font-semibold rounded-lg"
+                className="py-2 px-2 sm:px-4 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer"
               >
                 کتاب‌های مشابه ({toPersianDigits(similarBooks.length)})
               </TabsTrigger>
