@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ketabgard (کتاب‌گرد) — Interactive SVG Logo & Brand Identity Showcase</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono, Vazirmatn (for Persian UI accents outside the logo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            persian: ['"Vazirmatn"', 'sans-serif'],
+          },
+          colors: {
+            ketab: {
+              teal: '#00a389',
+              emerald: '#044e42',
+              amber: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom subtle scrollbars and utility styles */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Apple-style continuous squircle mask approximation */
+    .ios-squircle {
+      border-radius: 22.5%;
+    }
+
+    /* Subtle construction blueprint background when grid mode is active */
+    .blueprint-bg {
+      background-image: 
+        linear-gradient(to right, rgba(0, 163, 137, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 163, 137, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Custom color input styling */
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    input[type="color"]::-webkit-color-swatch {
+      border: 2px solid rgba(15, 23, 42, 0.12);
+      border-radius: 8px;
+    }
+
+    /* Smooth SVG transitions for live color updates */
+    .logo-svg path,
+    .logo-svg rect,
+    .logo-svg circle,
+    .logo-svg g {
+      transition: fill 0.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-[#00a389]/15 selection:text-[#044e42] min-h-screen flex flex-col">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Top Studio Header -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-40">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Identity Title -->
+      <div class="flex items-center gap-3.5">
+        <div id="header-mini-logo" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 shadow-xs shrink-0">
+          <!-- Populated dynamically -->
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="font-bold text-base sm:text-lg tracking-tight text-slate-900">Ketabgard</h1>
+            <span class="font-persian text-sm font-semibold text-[#00a389] bg-[#00a389]/10 px-2 py-0.5 rounded-md" dir="rtl">کتاب‌گرد</span>
+            <span class="hidden md:inline-flex items-center gap-1 text-[11px] font-mono uppercase tracking-wider font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
+              Flat Vector Spec v1.0
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Online Ebook &amp; Audiobook Platform — Ultra-Minimalist Geometric Brand Mark</p>
+        </div>
+      </div>
+
+      <!-- Quick Concept Switcher (Desktop) -->
+      <div class="hidden xl:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+        <button onclick="selectConcept(1)" id="nav-concept-1" class="concept-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 bg-white text-slate-900 shadow-xs">
+          <span class="w-2 h-2 rounded-full bg-[#00a389]"></span>
+          01. Circular Sonic Book (Hero)
+        </button>
+        <button onclick="selectConcept(2)" id="nav-concept-2" class="concept-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span class="w-2 h-2 rounded-full bg-[#044e42]"></span>
+          02. Negative Space Wave-Crest
+        </button>
+        <button onclick="selectConcept(3)" id="nav-concept-3" class="concept-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span>
+          03. Continuous Flow Ribbon
+        </button>
+      </div>
+
+      <!-- Header Export Actions -->
+      <div class="flex items-center gap-2">
+        <button onclick="copyRawSVG()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-[0.98] cursor-pointer" title="Copy Standalone SVG Code">
+          <i data-lucide="code-2" class="w-3.5 h-3.5 text-[#00a389]"></i>
+          <span class="hidden sm:inline">Copy SVG</span>
+        </button>
+        <button onclick="downloadSVGFile()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all active:scale-[0.98] cursor-pointer" title="Download Vector .SVG">
+          <i data-lucide="file-code" class="w-3.5 h-3.5 text-[#044e42]"></i>
+          <span class="hidden sm:inline">.SVG</span>
+        </button>
+        <button onclick="downloadPNGFile()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-[#044e42] hover:bg-[#00a389] transition-all shadow-xs active:scale-[0.98] cursor-pointer">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>1024px .PNG</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Interactive Workspace -->
+  <main class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+      <!-- LEFT / CENTER COLUMN: Primary Hero Vector Stage (8 cols on lg) -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+
+        <!-- View Mode Toolbar Bar -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-2 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+          <div class="flex flex-wrap items-center gap-1">
+            <button onclick="setViewMode('white')" id="mode-white" class="view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-[#044e42] text-white shadow-xs cursor-pointer">
+              <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+              Pure White Canvas (1:1)
+            </button>
+            <button onclick="setViewMode('grid')" id="mode-grid" class="view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+              <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+              Construction Grid
+            </button>
+            <button onclick="setViewMode('squircle')" id="mode-squircle" class="view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+              App Icon Squircle
+            </button>
+            <button onclick="setViewMode('mockup')" id="mode-mockup" class="view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">
+              <i data-lucide="layout-template" class="w-3.5 h-3.5"></i>
+              App Header &amp; Player
+            </button>
+          </div>
+
+          <!-- Strict Prompt Compliance Badge -->
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50/80 border border-emerald-200/70 text-[#044e42] text-[11px] font-medium">
+            <span class="w-2 h-2 rounded-full bg-[#00a389]"></span>
+            <span>#FFFFFF Solid • No Text • No 3D/Shadows</span>
+          </div>
+        </div>
+
+        <!-- HERO DISPLAY STAGE -->
+        <div class="relative bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs flex flex-col">
+
+          <!-- STAGE VIEW 1 & 2: Pure White Canvas (Default) & Construction Grid Overlay -->
+          <div id="stage-canvas-view" class="relative w-full min-h-[460px] sm:min-h-[560px] bg-[#ffffff] flex flex-col items-center justify-center p-6 sm:p-12 transition-all">
+            
+            <!-- Subtle Corner Spec Readout (Outside the logo mark) -->
+            <div class="absolute top-5 left-5 flex items-center gap-2 pointer-events-none select-none">
+              <span id="stage-concept-badge" class="px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-slate-100 text-slate-600 border border-slate-200/80">
+                CONCEPT 01 // CIRCULAR SONIC BOOK
+              </span>
+            </div>
+
+            <div class="absolute top-5 right-5 flex items-center gap-1.5 pointer-events-none select-none">
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-500 bg-slate-50 border border-slate-200/70">
+                512 × 512 px • SVG 1.1
+              </span>
+            </div>
+
+            <!-- Primary Pure White Logo Container (Strictly #FFFFFF background, zero shadow, zero text) -->
+            <div id="hero-logo-wrapper" class="relative w-72 h-72 sm:w-96 sm:h-96 md:w-[420px] md:h-[420px] flex items-center justify-center bg-[#ffffff] transition-transform duration-300">
+              <!-- Raw SVG injected here -->
+              <div id="hero-svg-mount" class="w-full h-full flex items-center justify-center"></div>
+
+              <!-- Mathematical Construction Grid Overlay (Toggled in 'grid' mode) -->
+              <svg id="construction-grid-overlay" viewBox="0 0 512 512" class="w-full h-full absolute inset-0 pointer-events-none hidden" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Bounding Frame -->
+                <rect x="72" y="72" width="368" height="368" stroke="#00a389" stroke-width="1" stroke-dasharray="4 4" stroke-opacity="0.45"/>
+                <!-- Center Axes -->
+                <line x1="256" y1="24" x2="256" y2="488" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="6 4" stroke-opacity="0.7"/>
+                <line x1="24" y1="256" x2="488" y2="256" stroke="#00a389" stroke-width="1" stroke-dasharray="6 4" stroke-opacity="0.5"/>
+                <!-- Diagonal Symmetry Lines -->
+                <line x1="72" y1="72" x2="440" y2="440" stroke="#044e42" stroke-width="0.75" stroke-opacity="0.25"/>
+                <line x1="440" y1="72" x2="72" y2="440" stroke="#044e42" stroke-width="0.75" stroke-opacity="0.25"/>
+                <!-- Concentric Geometric Circles -->
+                <circle cx="256" cy="256" r="184" stroke="#044e42" stroke-width="1.2" stroke-opacity="0.55"/>
+                <circle cx="256" cy="256" r="156" stroke="#00a389" stroke-width="1" stroke-dasharray="5 5" stroke-opacity="0.55"/>
+                <circle cx="256" cy="256" r="114" stroke="#00a389" stroke-width="1" stroke-dasharray="3 3" stroke-opacity="0.4"/>
+                <!-- 5 Vertical Harmonic Wave Guides -->
+                <line x1="152" y1="72" x2="152" y2="400" stroke="#044e42" stroke-width="0.8" stroke-dasharray="2 4" stroke-opacity="0.4"/>
+                <line x1="204" y1="72" x2="204" y2="400" stroke="#044e42" stroke-width="0.8" stroke-dasharray="2 4" stroke-opacity="0.4"/>
+                <line x1="308" y1="72" x2="308" y2="400" stroke="#044e42" stroke-width="0.8" stroke-dasharray="2 4" stroke-opacity="0.4"/>
+                <line x1="360" y1="72" x2="360" y2="400" stroke="#044e42" stroke-width="0.8" stroke-dasharray="2 4" stroke-opacity="0.4"/>
+                <!-- Golden Ratio & Key Geometric Anchor Nodes -->
+                <circle cx="256" cy="74" r="5" fill="#f59e0b"/>
+                <circle cx="256" cy="346" r="4" fill="#00a389"/>
+                <circle cx="256" cy="440" r="4" fill="#044e42"/>
+                <!-- Dimension Annotations -->
+                <g font-family="JetBrains Mono, monospace" font-size="11" fill="#044e42" opacity="0.85">
+                  <text x="264" y="46">X:256 (AXIS)</text>
+                  <text x="385" y="90">R = 184px</text>
+                  <text x="372" y="136">R = 156px</text>
+                  <text x="80" y="458">Δ NEGATIVE SPACE = 24px</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Bottom Stage Controls (Zoom & Quick Grid Toggle) -->
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-4 w-full pt-4 border-t border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-slate-400">Canvas Scale:</span>
+                <div class="inline-flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+                  <button onclick="setCanvasZoom(0.75)" class="zoom-btn px-2.5 py-1 rounded-md text-xs font-mono text-slate-600 hover:text-slate-900 cursor-pointer" data-zoom="0.75">75%</button>
+                  <button onclick="setCanvasZoom(1)" class="zoom-btn px-2.5 py-1 rounded-md text-xs font-mono bg-white text-slate-900 shadow-2xs font-semibold cursor-pointer" data-zoom="1">100%</button>
+                  <button onclick="setCanvasZoom(1.15)" class="zoom-btn px-2.5 py-1 rounded-md text-xs font-mono text-slate-600 hover:text-slate-900 cursor-pointer" data-zoom="1.15">115%</button>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4 text-xs text-slate-500 font-mono">
+                <span class="flex items-center gap-1.5">
+                  <span id="swatch-dot-teal" class="w-2.5 h-2.5 rounded-full bg-[#00a389] inline-block"></span>
+                  <span id="readout-teal">#00A389</span>
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span id="swatch-dot-emerald" class="w-2.5 h-2.5 rounded-full bg-[#044e42] inline-block"></span>
+                  <span id="readout-emerald">#044E42</span>
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span id="swatch-dot-amber" class="w-2.5 h-2.5 rounded-full bg-[#f59e0b] inline-block"></span>
+                  <span id="readout-amber">#F59E0B</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE VIEW 3: App Icon Squircle Preview (iOS / Android) -->
+          <div id="stage-squircle-view" class="hidden w-full min-h-[460px] sm:min-h-[560px] bg-slate-100/70 p-6 sm:p-10 flex flex-col justify-between">
+            <div class="text-center max-w-lg mx-auto mb-6">
+              <span class="text-[11px] font-mono uppercase tracking-widest text-[#00a389] font-semibold">iOS &amp; Android Launcher System</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1">App Icon Squircle Adaptability</h3>
+              <p class="text-xs text-slate-500 mt-1">Testing optical balance, circular margin clearance, and negative space legibility across light, dark emerald, and vibrant surfaces.</p>
+            </div>
+
+            <!-- 3 App Icon Surface Variants -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 my-auto max-w-3xl mx-auto w-full">
+              <!-- Variant A: Pure White Solid App Icon (Primary) -->
+              <div class="bg-white rounded-2xl p-6 border border-slate-200/80 flex flex-col items-center text-center">
+                <div class="w-36 h-36 bg-[#ffffff] ios-squircle border border-slate-200/90 flex items-center justify-center p-4">
+                  <div id="squircle-mount-white" class="w-full h-full"></div>
+                </div>
+                <span class="mt-4 text-xs font-bold text-slate-800">Primary White Icon</span>
+                <span class="text-[11px] font-mono text-slate-400 mt-0.5">Surface: #FFFFFF</span>
+              </div>
+
+              <!-- Variant B: Deep Emerald App Icon -->
+              <div class="bg-white rounded-2xl p-6 border border-slate-200/80 flex flex-col items-center text-center">
+                <div id="squircle-card-emerald" class="w-36 h-36 bg-[#044e42] ios-squircle flex items-center justify-center p-4">
+                  <div id="squircle-mount-emerald" class="w-full h-full"></div>
+                </div>
+                <span class="mt-4 text-xs font-bold text-slate-800">Deep Emerald Dark Mode</span>
+                <span class="text-[11px] font-mono text-slate-400 mt-0.5">Surface: #044E42</span>
+              </div>
+
+              <!-- Variant C: Soft Warm Alabaster App Icon -->
+              <div class="bg-white rounded-2xl p-6 border border-slate-200/80 flex flex-col items-center text-center">
+                <div class="w-36 h-36 bg-[#f0fdfa] ios-squircle border border-teal-200/70 flex items-center justify-center p-4">
+                  <div id="squircle-mount-tint" class="w-full h-full"></div>
+                </div>
+                <span class="mt-4 text-xs font-bold text-slate-800">Persian Mint Tint</span>
+                <span class="text-[11px] font-mono text-slate-400 mt-0.5">Surface: #F0FDFA</span>
+              </div>
+            </div>
+
+            <!-- Home Screen Dock Simulation -->
+            <div class="mt-8 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 max-w-md mx-auto w-full flex items-center justify-around">
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-14 h-14 bg-white ios-squircle border border-slate-200 flex items-center justify-center p-1.5">
+                  <div id="dock-icon-1" class="w-full h-full"></div>
+                </div>
+                <span class="text-[11px] font-semibold text-slate-700">Ketabgard</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5">
+                <div class="w-14 h-14 bg-white ios-squircle border border-slate-200 flex items-center justify-center p-1.5">
+                  <div id="dock-icon-2" class="w-full h-full"></div>
+                </div>
+                <span class="text-[11px] font-persian font-semibold text-slate-700" dir="rtl">کتاب‌گرد</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5 opacity-50">
+                <div class="w-14 h-14 bg-slate-100 ios-squircle border border-slate-200 flex items-center justify-center text-slate-400">
+                  <i data-lucide="headphones" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-500">Podcasts</span>
+              </div>
+              <div class="flex flex-col items-center gap-1.5 opacity-50">
+                <div class="w-14 h-14 bg-slate-100 ios-squircle border border-slate-200 flex items-center justify-center text-slate-400">
+                  <i data-lucide="book-open" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[11px] font-medium text-slate-500">Library</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STAGE VIEW 4: Navbar / App Header & Audiobook Player Mockup -->
+          <div id="stage-mockup-view" class="hidden w-full min-h-[460px] sm:min-h-[560px] bg-slate-100/80 p-6 sm:p-10 flex flex-col justify-center gap-6">
+            
+            <!-- Web Navbar Mockup -->
+            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:px-6 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div id="mockup-nav-logo" class="w-10 h-10 shrink-0"></div>
+                <div class="flex items-baseline gap-2">
+                  <span class="font-extrabold text-lg tracking-tight text-[#044e42]">ketabgard</span>
+                  <span class="text-slate-300">|</span>
+                  <span class="font-persian font-bold text-base text-[#00a389]" dir="rtl">کتاب‌گرد</span>
+                </div>
+              </div>
+              <div class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600">
+                <span class="text-[#00a389]">Audiobooks</span>
+                <span>Ebooks</span>
+                <span>Persian Classics</span>
+                <span>Bestsellers</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1.5 rounded-lg bg-[#044e42] text-white text-xs font-semibold">Start Listening</span>
+              </div>
+            </div>
+
+            <!-- Mobile Audiobook & Ebook Player Card Mockup -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Card 1: Audiobook Active Player -->
+              <div class="bg-white rounded-2xl border border-slate-200/90 p-6 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div id="mockup-player-logo" class="w-8 h-8"></div>
+                    <div>
+                      <span class="text-[11px] font-bold uppercase tracking-wider text-[#00a389] block">Ketabgard Audio Original</span>
+                      <span class="text-xs text-slate-500">Chapter 04 • The Silk Road Chronicles</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-md bg-amber-50 text-[#f59e0b] font-mono text-[11px] font-semibold border border-amber-200/60">24-BIT</span>
+                </div>
+
+                <!-- Simulated Harmonic Soundwave Bar Sync -->
+                <div class="my-6 py-5 px-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center gap-2">
+                  <div class="w-1.5 h-6 rounded-full bg-[#044e42]"></div>
+                  <div class="w-1.5 h-10 rounded-full bg-[#00a389]"></div>
+                  <div class="w-1.5 h-14 rounded-full bg-[#f59e0b]"></div>
+                  <div class="w-1.5 h-9 rounded-full bg-[#00a389]"></div>
+                  <div class="w-1.5 h-5 rounded-full bg-[#044e42]"></div>
+                  <div class="w-1.5 h-11 rounded-full bg-[#00a389]"></div>
+                  <div class="w-1.5 h-16 rounded-full bg-[#f59e0b]"></div>
+                  <div class="w-1.5 h-8 rounded-full bg-[#00a389]"></div>
+                  <div class="w-1.5 h-4 rounded-full bg-[#044e42]"></div>
+                  <div class="w-1.5 h-12 rounded-full bg-[#00a389]"></div>
+                  <div class="w-1.5 h-7 rounded-full bg-[#044e42]"></div>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 font-mono">
+                  <span>14:28</span>
+                  <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700">
+                      <i data-lucide="skip-back" class="w-3.5 h-3.5"></i>
+                    </span>
+                    <span class="w-10 h-10 rounded-full bg-[#00a389] text-white flex items-center justify-center">
+                      <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                    </span>
+                    <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700">
+                      <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
+                    </span>
+                  </div>
+                  <span>42:10</span>
+                </div>
+              </div>
+
+              <!-- Card 2: Bilingual Brand Identity Card -->
+              <div class="bg-[#044e42] text-white rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="bg-white rounded-2xl p-3 w-20 h-20 flex items-center justify-center shrink-0">
+                    <div id="mockup-badge-logo" class="w-full h-full"></div>
+                  </div>
+                  <div class="text-right font-persian" dir="rtl">
+                    <div class="text-xl font-bold text-white">کتاب‌گرد</div>
+                    <div class="text-xs text-teal-200 mt-0.5">پلتفرم کتاب صوتی و الکترونیک</div>
+                  </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
+                  <div>
+                    <div class="font-semibold text-teal-100">Read &amp; Listen Seamlessly</div>
+                    <div class="text-teal-300/80 text-[11px] mt-0.5">Instant sync between Ebook pages &amp; Audio chapters</div>
+                  </div>
+                  <span class="w-3 h-3 rounded-full bg-[#f59e0b] shrink-0"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- MULTI-SCALE FAVICON & SMALL-SIZE STRESS TEST STRIP -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="scan-eye" class="w-4 h-4 text-[#00a389]"></i>
+                Multi-Scale Optical Legibility Stress Test
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">Generous negative space channels ensure crisp silhouette recognition from 512px down to 16px browser favicons.</p>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">100% Flat Vector Scaling</span>
+          </div>
+
+          <div class="pt-5 flex flex-wrap items-end justify-between gap-6">
+            <div class="flex flex-wrap items-end gap-6 sm:gap-8">
+              <!-- 128px -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-28 h-28 rounded-2xl bg-white border border-slate-200/90 p-2 flex items-center justify-center">
+                  <div id="scale-128" class="w-full h-full"></div>
+                </div>
+                <span class="text-[11px] font-mono text-slate-500">128×128 (Store)</span>
+              </div>
+              <!-- 64px -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 rounded-xl bg-white border border-slate-200/90 p-1.5 flex items-center justify-center">
+                  <div id="scale-64" class="w-full h-full"></div>
+                </div>
+                <span class="text-[11px] font-mono text-slate-500">64×64 (Mobile)</span>
+              </div>
+              <!-- 32px -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-lg bg-white border border-slate-200/90 p-1 flex items-center justify-center">
+                  <div id="scale-32" class="w-full h-full"></div>
+                </div>
+                <span class="text-[11px] font-mono text-slate-500">32×32 (Navbar)</span>
+              </div>
+              <!-- 16px -->
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-7 h-7 rounded-md bg-white border border-slate-200/90 p-1 flex items-center justify-center">
+                  <div id="scale-16" class="w-4 h-4"></div>
+                </div>
+                <span class="text-[11px] font-mono text-slate-500">16×16 (Favicon)</span>
+              </div>
+            </div>
+
+            <!-- Monochrome / Single-Color Stencil Check -->
+            <div class="flex items-center gap-4 pl-0 sm:pl-6 sm:border-l border-slate-100">
+              <div class="flex flex-col items-center gap-2">
+                <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center">
+                  <div id="scale-mono-dark" class="w-full h-full grayscale contrast-200"></div>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400">1-Color Ink</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE STANDALONE SVG CODE INSPECTOR -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden">
+          <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="terminal" class="w-4 h-4 text-[#044e42]"></i>
+              <span class="text-xs font-bold text-slate-800">Clean Standalone SVG Markup</span>
+              <span class="text-[11px] font-mono text-slate-400 hidden sm:inline">— Zero dependencies, ready for production</span>
+            </div>
+            <button onclick="copyRawSVG()" class="text-xs font-semibold text-[#00a389] hover:text-[#044e42] flex items-center gap-1 cursor-pointer">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              Copy Code
+            </button>
+          </div>
+          <pre class="p-4 bg-slate-900 text-slate-100 text-[11px] font-mono overflow-x-auto leading-relaxed max-h-48"><code id="svg-code-display"></code></pre>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Concept Switcher, Live Color Fine-Tuning & Export Suite (4 cols on lg) -->
+      <div class="lg:col-span-4 flex flex-col gap-6">
+
+        <!-- 1. CONCEPT VARIATION SWITCHER -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5">
+          <div class="flex items-center justify-between mb-3.5">
+            <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-[#00a389]"></i>
+              Vector Concept Variations
+            </h2>
+            <span class="text-[11px] font-mono text-slate-400">3 Custom Marks</span>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <!-- Concept 1 Card -->
+            <button onclick="selectConcept(1)" id="card-concept-1" class="concept-card group w-full text-left p-3.5 rounded-xl border-2 border-[#00a389] bg-teal-50/30 transition-all flex items-start gap-3.5 cursor-pointer">
+              <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-1.5 shrink-0 flex items-center justify-center">
+                <div id="thumb-concept-1" class="w-full h-full"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-xs font-bold text-slate-900">01. Circular Sonic Book</span>
+                  <span class="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-[#00a389] text-white rounded">HERO</span>
+                </div>
+                <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                  Sweeping emerald &amp; teal circular orbit arcs, layered open book wings, and 5 harmonic pill soundwaves with an amber-gold peak bookmark.
+                </p>
+              </div>
+            </button>
+
+            <!-- Concept 2 Card -->
+            <button onclick="selectConcept(2)" id="card-concept-2" class="concept-card group w-full text-left p-3.5 rounded-xl border-2 border-slate-200/80 hover:border-slate-300 bg-white transition-all flex items-start gap-3.5 cursor-pointer">
+              <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-1.5 shrink-0 flex items-center justify-center">
+                <div id="thumb-concept-2" class="w-full h-full"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-xs font-bold text-slate-900">02. Negative Space Wave-Crest</span>
+                  <span class="text-[10px] font-mono text-slate-400">CREST</span>
+                </div>
+                <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                  Concentric circular perimeter opening into crisp V-shaped book pages, with negative space carving rhythmic audio wave channels and a golden apex spark.
+                </p>
+              </div>
+            </button>
+
+            <!-- Concept 3 Card -->
+            <button onclick="selectConcept(3)" id="card-concept-3" class="concept-card group w-full text-left p-3.5 rounded-xl border-2 border-slate-200/80 hover:border-slate-300 bg-white transition-all flex items-start gap-3.5 cursor-pointer">
+              <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-1.5 shrink-0 flex items-center justify-center">
+                <div id="thumb-concept-3" class="w-full h-full"></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-xs font-bold text-slate-900">03. Continuous Flow Ribbon</span>
+                  <span class="text-[10px] font-mono text-slate-400">MONOLINE</span>
+                </div>
+                <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                  Ultra-minimalist geometric ribbon folding from a circular orbit into an open book base and seamlessly oscillating into vertical soundwaves.
+                </p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. LIVE COLOR PALETTE FINE-TUNING -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="palette" class="w-4 h-4 text-[#00a389]"></i>
+              Brand Color Fine-Tuning
+            </h2>
+            <button onclick="resetColors()" class="text-xs font-semibold text-[#00a389] hover:text-[#044e42] flex items-center gap-1 transition-colors cursor-pointer" title="Reset to Official Brand Colors">
+              <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+              Reset Default
+            </button>
+          </div>
+
+          <div class="space-y-3.5">
+            <!-- Color 1: Vibrant Persian Teal -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex items-center gap-3">
+                <input type="color" id="picker-teal" value="#00a389" oninput="updateColor('teal', this.value)" class="w-9 h-9 rounded-lg shrink-0" />
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Vibrant Persian Teal</div>
+                  <div class="text-[11px] text-slate-500">Inner Pages &amp; Harmonic Wave</div>
+                </div>
+              </div>
+              <input type="text" id="hex-teal" value="#00a389" onchange="updateColor('teal', this.value)" maxlength="7" class="w-20 text-center font-mono text-xs font-semibold py-1.5 px-2 rounded-lg bg-white border border-slate-200 text-slate-800 uppercase" />
+            </div>
+
+            <!-- Color 2: Deep Emerald -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex items-center gap-3">
+                <input type="color" id="picker-emerald" value="#044e42" oninput="updateColor('emerald', this.value)" class="w-9 h-9 rounded-lg shrink-0" />
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Deep Emerald</div>
+                  <div class="text-[11px] text-slate-500">Outer Orbit &amp; Book Spine Base</div>
+                </div>
+              </div>
+              <input type="text" id="hex-emerald" value="#044e42" onchange="updateColor('emerald', this.value)" maxlength="7" class="w-20 text-center font-mono text-xs font-semibold py-1.5 px-2 rounded-lg bg-white border border-slate-200 text-slate-800 uppercase" />
+            </div>
+
+            <!-- Color 3: Warm Amber-Gold Accent -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
+              <div class="flex items-center gap-3">
+                <input type="color" id="picker-amber" value="#f59e0b" oninput="updateColor('amber', this.value)" class="w-9 h-9 rounded-lg shrink-0" />
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Warm Amber-Gold</div>
+                  <div class="text-[11px] text-slate-500">Bookmark Peak &amp; Audio Spark</div>
+                </div>
+              </div>
+              <input type="text" id="hex-amber" value="#f59e0b" onchange="updateColor('amber', this.value)" maxlength="7" class="w-20 text-center font-mono text-xs font-semibold py-1.5 px-2 rounded-lg bg-white border border-slate-200 text-slate-800 uppercase" />
+            </div>
+          </div>
+
+          <!-- Curated Brand Harmonies -->
+          <div class="mt-4 pt-3.5 border-t border-slate-100">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">Quick Palette Harmonies</span>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="applyPreset('#00a389', '#044e42', '#f59e0b', 'Official Persian Teal')" class="p-2 rounded-lg border border-slate-200 hover:border-slate-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="flex items-center -space-x-1">
+                  <span class="w-4 h-4 rounded-full bg-[#00a389] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#044e42] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#f59e0b] border border-white"></span>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-700">Official Spec</span>
+              </button>
+
+              <button onclick="applyPreset('#0d9488', '#115e59', '#f97316', 'Nishapur Turquoise')" class="p-2 rounded-lg border border-slate-200 hover:border-slate-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="flex items-center -space-x-1">
+                  <span class="w-4 h-4 rounded-full bg-[#0d9488] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#115e59] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#f97316] border border-white"></span>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-700">Nishapur</span>
+              </button>
+
+              <button onclick="applyPreset('#10b981', '#064e3b', '#eab308', 'Emerald & Saffron')" class="p-2 rounded-lg border border-slate-200 hover:border-slate-300 bg-white flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="flex items-center -space-x-1">
+                  <span class="w-4 h-4 rounded-full bg-[#10b981] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#064e3b] border border-white"></span>
+                  <span class="w-4 h-4 rounded-full bg-[#eab308] border border-white"></span>
+                </div>
+                <span class="text-[10px] font-semibold text-slate-700">Saffron Gold</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ONE-CLICK PRODUCTION EXPORT SUITE -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5">
+          <div class="flex items-center justify-between mb-3.5">
+            <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="package-check" class="w-4 h-4 text-[#00a389]"></i>
+              One-Click Asset Export
+            </h2>
+            <span class="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-medium">Production Ready</span>
+          </div>
+
+          <div class="flex flex-col gap-2.5">
+            <button onclick="copyRawSVG()" class="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs flex items-center justify-between transition-all active:scale-[0.99] cursor-pointer">
+              <span class="flex items-center gap-2.5">
+                <i data-lucide="copy" class="w-4 h-4 text-[#00a389]"></i>
+                Copy Raw SVG Code
+              </span>
+              <span class="font-mono text-[10px] text-slate-400">Clipboard</span>
+            </button>
+
+            <button onclick="downloadSVGFile()" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-semibold text-xs flex items-center justify-between transition-all active:scale-[0.99] cursor-pointer">
+              <span class="flex items-center gap-2.5">
+                <i data-lucide="file-code-2" class="w-4 h-4 text-[#044e42]"></i>
+                Download Vector (.SVG)
+              </span>
+              <span class="font-mono text-[10px] text-slate-400">Infinite Scale</span>
+            </button>
+
+            <button onclick="downloadPNGFile()" class="w-full py-2.5 px-4 rounded-xl bg-[#00a389] hover:bg-[#044e42] text-white font-semibold text-xs flex items-center justify-between transition-all active:scale-[0.99] cursor-pointer">
+              <span class="flex items-center gap-2.5">
+                <i data-lucide="image-down" class="w-4 h-4"></i>
+                Download High-Res .PNG
+              </span>
+              <span class="font-mono text-[10px] text-teal-100">1024 × 1024 px</span>
+            </button>
+          </div>
+
+          <!-- Semiotic Brand Anatomy Breakdown -->
+          <div class="mt-5 pt-4 border-t border-slate-100 space-y-2.5 text-xs text-slate-600">
+            <div class="font-bold text-slate-800 text-[11px] uppercase tracking-wider">Visual Metaphor Anatomy</div>
+            <div class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#044e42] mt-1.5 shrink-0"></span>
+              <p><strong class="text-slate-800">Circular Motion ("Gard" / گرد):</strong> Sweeping geometric arcs evoke continuous exploration and circulating stories.</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#00a389] mt-1.5 shrink-0"></span>
+              <p><strong class="text-slate-800">Open Book Wings ("Ketab" / کتاب):</strong> Layered lower crescents with crisp white negative space form an inviting open book.</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#f59e0b] mt-1.5 shrink-0"></span>
+              <p><strong class="text-slate-800">Harmonic Audio Peak:</strong> Pill-shaped soundwave bars rise from the spine, crowned by a warm amber-gold bookmark frequency.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Hidden offscreen canvas for 1024x1024 High-Res PNG rendering -->
+  <canvas id="export-canvas" width="1024" height="1024" class="hidden"></canvas>
+
+  <!-- Application Logic & Mathematically Precise SVG Generators -->
+  <script>
+    // ============================================================================
+    // STATE MANAGEMENT
+    // ============================================================================
+    const state = {
+      activeConcept: 1,
+      viewMode: 'white', // 'white' | 'grid' | 'squircle' | 'mockup'
+      zoom: 1,
+      colors: {
+        teal: '#00a389',
+        emerald: '#044e42',
+        amber: '#f59e0b',
+        bg: '#ffffff'
+      }
+    };
+
+    const CONCEPT_METADATA = {
+      1: {
+        id: 1,
+        slug: 'circular-sonic-book',
+        badge: 'CONCEPT 01 // CIRCULAR SONIC BOOK (HERO)',
+        name: 'Circular Sonic Book'
+      },
+      2: {
+        id: 2,
+        slug: 'negative-space-wave-crest',
+        badge: 'CONCEPT 02 // NEGATIVE SPACE WAVE-CREST',
+        name: 'Negative Space Wave-Crest'
+      },
+      3: {
+        id: 3,
+        slug: 'continuous-flow-ribbon',
+        badge: 'CONCEPT 03 // CONTINUOUS FLOW RIBBON',
+        name: 'Continuous Flow Ribbon'
+      }
+    };
+
+    // ============================================================================
+    // MATHEMATICALLY PRECISE FLAT VECTOR SVG GENERATORS (512x512)
+    // Strictly flat vector graphic design, no text, no shadows, no 3D rendering.
+    // ============================================================================
+    function generateLogoSVG(conceptId, colors, includeSolidWhiteBg = true) {
+      const { teal, emerald, amber } = colors;
+      const bgRect = includeSolidWhiteBg
+        ? `\n  <!-- Pure White Solid Background -->\n  <rect width="512" height="512" fill="#ffffff"/>`
+        : '';
+
+      if (conceptId === 1) {
+        // CONCEPT 1 (HERO): "Circular Sonic Book"
+        // - Left & right sweeping circular orbit arcs (R=170, stroke=28) in Deep Emerald & Persian Teal
+        // - Two layered geometric book wings at the lower half curving upward from the central spine
+        //   with crisp 18px white negative space between pages and along the central spine
+        // - 5 rounded pill-shaped vertical soundwave bars arranged in a circular harmonic curve
+        //   rising from the open book's negative space, with the center peak bar in Warm Amber-Gold (#f59e0b)
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" fill="none">${bgRect}
+  <!-- Upper Sweeping Circular Orbit Arcs (Circular Flowing Motion) -->
+  <path d="M 86.9 273.8 A 170 170 0 0 1 186.9 100.7" stroke="${emerald}" stroke-width="28" stroke-linecap="round"/>
+  <path d="M 325.1 100.7 A 170 170 0 0 1 425.1 273.8" stroke="${teal}" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- Lower Layer 2: Outer Open Book Cradle Wings (Deep Emerald) -->
+  <path d="M 103.5 359.0 C 154.0 356.0 206.0 374.0 246.0 412.0 L 246.0 440.0 C 181.0 434.0 123.0 398.0 95.0 371.0 C 90.5 366.5 95.5 359.5 103.5 359.0 Z" fill="${emerald}"/>
+  <path d="M 408.5 359.0 C 358.0 356.0 306.0 374.0 266.0 412.0 L 266.0 440.0 C 331.0 434.0 389.0 398.0 417.0 371.0 C 421.5 366.5 416.5 359.5 408.5 359.0 Z" fill="${emerald}"/>
+
+  <!-- Lower Layer 1: Inner Open Book Pages Curving Upward (Vibrant Persian Teal) -->
+  <path d="M 84.0 309.0 C 144.0 296.0 204.0 314.0 246.0 354.0 L 246.0 388.0 C 202.0 350.0 146.0 334.0 87.0 338.0 C 76.5 338.5 73.5 311.5 84.0 309.0 Z" fill="${teal}"/>
+  <path d="M 428.0 309.0 C 368.0 296.0 308.0 314.0 266.0 354.0 L 266.0 388.0 C 310.0 350.0 366.0 334.0 425.0 338.0 C 435.5 338.5 438.5 311.5 428.0 309.0 Z" fill="${teal}"/>
+
+  <!-- 5 Harmonic Pill-Shaped Vertical Soundwave Bars Rising from Book Negative Space -->
+  <rect x="138" y="184" width="28" height="84" rx="14" fill="${emerald}"/>
+  <rect x="190" y="132" width="28" height="152" rx="14" fill="${teal}"/>
+  <rect x="242" y="72" width="28" height="248" rx="14" fill="${amber}"/>
+  <rect x="294" y="132" width="28" height="152" rx="14" fill="${teal}"/>
+  <rect x="346" y="184" width="28" height="84" rx="14" fill="${emerald}"/>
+</svg>`;
+      }
+
+      if (conceptId === 2) {
+        // CONCEPT 2: "Negative Space Wave-Crest"
+        // - Concentric teal and emerald arcs wrap around the perimeter, opening at the bottom into
+        //   clean V-shaped book pages, while the interior negative space carves out rhythmic vertical
+        //   audio wave bars and a warm amber-gold spark/node at the apex.
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" fill="none">${bgRect}
+  <!-- Concentric Outer Perimeter Arcs Wrapping into V-Shaped Book Pages -->
+  <path d="M 220 76 A 184 184 0 0 0 83 320 L 244 422 L 244 390 L 112 306 A 154 154 0 0 1 220 106 Z" fill="${emerald}"/>
+  <path d="M 292 76 A 184 184 0 0 1 429 320 L 268 422 L 268 390 L 400 306 A 154 154 0 0 0 292 106 Z" fill="${teal}"/>
+
+  <!-- Inner Concentric Book Page Fold -->
+  <path d="M 118 346 L 244 426 L 244 446 L 104 358 A 12 12 0 0 1 118 346 Z" fill="${teal}"/>
+  <path d="M 394 346 L 268 426 L 268 446 L 408 358 A 12 12 0 0 0 394 346 Z" fill="${emerald}"/>
+
+  <!-- Sculpted Crest Interior Carvings (Positive & Negative Space Audio Wave Pillars) -->
+  <!-- Far Left Wave Pillar -->
+  <path d="M 134 212 C 134 198 160 198 160 212 L 160 282 L 134 266 Z" fill="${emerald}"/>
+  <!-- Mid Left Wave Pillar -->
+  <path d="M 186 152 C 186 138 214 138 214 152 L 214 316 L 186 298 Z" fill="${teal}"/>
+  <!-- Center Spine Wave Pillar -->
+  <path d="M 240 130 C 240 116 272 116 272 130 L 272 352 L 256 364 L 240 352 Z" fill="${emerald}"/>
+  <!-- Mid Right Wave Pillar -->
+  <path d="M 298 152 C 298 138 326 138 326 152 L 326 298 L 298 316 Z" fill="${teal}"/>
+  <!-- Far Right Wave Pillar -->
+  <path d="M 352 212 C 352 198 378 198 378 212 L 378 266 L 352 282 Z" fill="${emerald}"/>
+
+  <!-- Apex Golden Spark / Bookmark Crown Node -->
+  <circle cx="256" cy="84" r="18" fill="${amber}"/>
+</svg>`;
+      }
+
+      // CONCEPT 3: "Continuous Flow Ribbon"
+      // - Ultra-minimalist flat geometric monoline vector where a sweeping circular ribbon folds
+      //   into an open book base and transitions seamlessly into vertical soundwave oscillations,
+      //   accented with a warm amber-gold bookmark node.
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" fill="none">${bgRect}
+  <!-- Outer Circular Orbit & Lower Book Base Cradle (Deep Emerald Monoline Ribbon) -->
+  <path d="M 196 90 A 176 176 0 1 0 432 256 C 432 342 356 392 256 436 C 156 392 80 342 80 256" stroke="${emerald}" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Continuous Inner Book-to-Soundwave Harmonic Oscillation Ribbon (Vibrant Persian Teal) -->
+  <path d="M 118 320 C 164 314 214 332 256 372 C 298 332 348 314 394 320 C 402 278 394 236 356 236 L 356 196 C 356 178 330 178 330 196 L 330 272 C 330 290 304 290 304 272 L 304 148 C 304 130 278 130 278 148 L 278 288 C 278 308 234 308 234 288 L 234 148 C 234 130 208 130 208 148 L 208 272 C 208 290 182 290 182 272 L 182 196 C 182 178 156 178 156 196 L 156 236 C 118 236 110 278 118 320 Z" stroke="${teal}" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Warm Amber-Gold Bookmark & Peak Frequency Node -->
+  <rect x="242" y="70" width="28" height="156" rx="14" fill="${amber}"/>
+</svg>`;
+    }
+
+    // ============================================================================
+    // RENDER & UI SYNCHRONIZATION
+    // ============================================================================
+    function renderAll() {
+      const primarySvg = generateLogoSVG(state.activeConcept, state.colors, true);
+      const transparentSvg = generateLogoSVG(state.activeConcept, state.colors, false);
+
+      // Dark surface variant for the Deep Emerald squircle card
+      const darkSurfaceColors = {
+        teal: state.colors.teal,
+        emerald: '#ffffff',
+        amber: state.colors.amber
+      };
+      const darkSurfaceSvg = generateLogoSVG(state.activeConcept, darkSurfaceColors, false);
+
+      // 1. Mount Hero Canvas SVG
+      document.getElementById('hero-svg-mount').innerHTML = primarySvg;
+      document.getElementById('header-mini-logo').innerHTML = transparentSvg;
+
+      // 2. Mount Concept Thumbnails in Sidebar (always showing their respective concepts with live colors)
+      document.getElementById('thumb-concept-1').innerHTML = generateLogoSVG(1, state.colors, false);
+      document.getElementById('thumb-concept-2').innerHTML = generateLogoSVG(2, state.colors, false);
+      document.getElementById('thumb-concept-3').innerHTML = generateLogoSVG(3, state.colors, false);
+
+      // 3. Mount App Icon Squircles & Dock Icons
+      document.getElementById('squircle-mount-white').innerHTML = primarySvg;
+      document.getElementById('squircle-mount-emerald').innerHTML = darkSurfaceSvg;
+      document.getElementById('squircle-mount-tint').innerHTML = transparentSvg;
+      document.getElementById('dock-icon-1').innerHTML = primarySvg;
+      document.getElementById('dock-icon-2').innerHTML = generateLogoSVG(2, state.colors, true);
+
+      // 4. Mount App Header & Player Mockup Icons
+      document.getElementById('mockup-nav-logo').innerHTML = transparentSvg;
+      document.getElementById('mockup-player-logo').innerHTML = transparentSvg;
+      document.getElementById('mockup-badge-logo').innerHTML = primarySvg;
+
+      // 5. Mount Multi-Scale Stress Test Strip
+      document.getElementById('scale-128').innerHTML = primarySvg;
+      document.getElementById('scale-64').innerHTML = primarySvg;
+      document.getElementById('scale-32').innerHTML = primarySvg;
+      document.getElementById('scale-16').innerHTML = primarySvg;
+      document.getElementById('scale-mono-dark').innerHTML = transparentSvg;
+
+      // 6. Update SVG Code Inspector
+      document.getElementById('svg-code-display').textContent = primarySvg;
+
+      // 7. Update Badges & Color Readouts
+      const meta = CONCEPT_METADATA[state.activeConcept];
+      document.getElementById('stage-concept-badge').textContent = meta.badge;
+
+      document.getElementById('swatch-dot-teal').style.backgroundColor = state.colors.teal;
+      document.getElementById('swatch-dot-emerald').style.backgroundColor = state.colors.emerald;
+      document.getElementById('swatch-dot-amber').style.backgroundColor = state.colors.amber;
+
+      document.getElementById('readout-teal').textContent = state.colors.teal.toUpperCase();
+      document.getElementById('readout-emerald').textContent = state.colors.emerald.toUpperCase();
+      document.getElementById('readout-amber').textContent = state.colors.amber.toUpperCase();
+    }
+
+    // ============================================================================
+    // INTERACTIVE CONTROLS
+    // ============================================================================
+    function selectConcept(conceptId) {
+      state.activeConcept = conceptId;
+
+      // Update Sidebar Concept Cards
+      [1, 2, 3].forEach(id => {
+        const card = document.getElementById(`card-concept-${id}`);
+        const navBtn = document.getElementById(`nav-concept-${id}`);
+        if (id === conceptId) {
+          card.className = 'concept-card group w-full text-left p-3.5 rounded-xl border-2 border-[#00a389] bg-teal-50/30 transition-all flex items-start gap-3.5 cursor-pointer';
+          if (navBtn) {
+            navBtn.className = 'concept-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 bg-white text-slate-900 shadow-xs';
+          }
+        } else {
+          card.className = 'concept-card group w-full text-left p-3.5 rounded-xl border-2 border-slate-200/80 hover:border-slate-300 bg-white transition-all flex items-start gap-3.5 cursor-pointer';
+          if (navBtn) {
+            navBtn.className = 'concept-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900';
+          }
+        }
+      });
+
+      renderAll();
+    }
+
+    function setViewMode(mode) {
+      state.viewMode = mode;
+
+      // Update Mode Buttons
+      const modes = ['white', 'grid', 'squircle', 'mockup'];
+      modes.forEach(m => {
+        const btn = document.getElementById(`mode-${m}`);
+        if (m === mode) {
+          btn.className = 'view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-[#044e42] text-white shadow-xs cursor-pointer';
+        } else {
+          btn.className = 'view-mode-btn px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 cursor-pointer';
+        }
+      });
+
+      const canvasView = document.getElementById('stage-canvas-view');
+      const squircleView = document.getElementById('stage-squircle-view');
+      const mockupView = document.getElementById('stage-mockup-view');
+      const gridOverlay = document.getElementById('construction-grid-overlay');
+
+      canvasView.classList.add('hidden');
+      squircleView.classList.add('hidden');
+      mockupView.classList.add('hidden');
+      gridOverlay.classList.add('hidden');
+      canvasView.classList.remove('blueprint-bg');
+
+      if (mode === 'white') {
+        canvasView.classList.remove('hidden');
+      } else if (mode === 'grid') {
+        canvasView.classList.remove('hidden');
+        canvasView.classList.add('blueprint-bg');
+        gridOverlay.classList.remove('hidden');
+      } else if (mode === 'squircle') {
+        squircleView.classList.remove('hidden');
+      } else if (mode === 'mockup') {
+        mockupView.classList.remove('hidden');
+      }
+    }
+
+    function setCanvasZoom(scale) {
+      state.zoom = scale;
+      const wrapper = document.getElementById('hero-logo-wrapper');
+      wrapper.style.transform = `scale(${scale})`;
+
+      document.querySelectorAll('.zoom-btn').forEach(btn => {
+        const btnZoom = parseFloat(btn.getAttribute('data-zoom'));
+        if (btnZoom === scale) {
+          btn.className = 'zoom-btn px-2.5 py-1 rounded-md text-xs font-mono bg-white text-slate-900 shadow-2xs font-semibold cursor-pointer';
+        } else {
+          btn.className = 'zoom-btn px-2.5 py-1 rounded-md text-xs font-mono text-slate-600 hover:text-slate-900 cursor-pointer';
+        }
+      });
+    }
+
+    function updateColor(key, value) {
+      if (!/^#[0-9A-Fa-f]{6}$/.test(value)) return;
+      state.colors[key] = value.toLowerCase();
+
+      document.getElementById(`picker-${key}`).value = state.colors[key];
+      document.getElementById(`hex-${key}`).value = state.colors[key].toUpperCase();
+
+      renderAll();
+    }
+
+    function applyPreset(teal, emerald, amber, label) {
+      state.colors.teal = teal;
+      state.colors.emerald = emerald;
+      state.colors.amber = amber;
+
+      ['teal', 'emerald', 'amber'].forEach(k => {
+        document.getElementById(`picker-${k}`).value = state.colors[k];
+        document.getElementById(`hex-${k}`).value = state.colors[k].toUpperCase();
+      });
+
+      renderAll();
+      showToast(`Applied "${label}" palette`);
+    }
+
+    function resetColors() {
+      applyPreset('#00a389', '#044e42', '#f59e0b', 'Official Ketabgard Brand');
+    }
+
+    // ============================================================================
+    // ONE-CLICK EXPORT FUNCTIONS (COPY SVG, DOWNLOAD SVG, DOWNLOAD 1024x1024 PNG)
+    // ============================================================================
+    function copyRawSVG() {
+      const svgMarkup = generateLogoSVG(state.activeConcept, state.colors, true);
+      const textarea = document.createElement('textarea');
+      textarea.value = svgMarkup;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        showToast('Standalone SVG code copied to clipboard!');
+      } catch (err) {
+        showToast('Could not copy automatically — select from code box below.');
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    function downloadSVGFile() {
+      const svgMarkup = generateLogoSVG(state.activeConcept, state.colors, true);
+      const meta = CONCEPT_METADATA[state.activeConcept];
+      const blob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `ketabgard-logo-${meta.slug}.svg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast(`Downloaded ketabgard-logo-${meta.slug}.svg`);
+    }
+
+    function downloadPNGFile() {
+      const svgMarkup = generateLogoSVG(state.activeConcept, state.colors, true);
+      const meta = CONCEPT_METADATA[state.activeConcept];
+      const canvas = document.getElementById('export-canvas');
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      const svgBlob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = function () {
+        ctx.clearRect(0, 0, 1024, 1024);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 1024, 1024);
+        ctx.drawImage(img, 0, 0, 1024, 1024);
+        URL.revokeObjectURL(url);
+
+        canvas.toBlob(function (pngBlob) {
+          const pngUrl = URL.createObjectURL(pngBlob);
+          const link = document.createElement('a');
+          link.href = pngUrl;
+          link.download = `ketabgard-logo-${meta.slug}-1024x1024.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(pngUrl);
+          showToast('Downloaded High-Res 1024×1024 .PNG!');
+        }, 'image/png');
+      };
+
+      img.src = url;
+    }
+
+    // ============================================================================
+    // TOAST NOTIFICATION HELPER
+    // ============================================================================
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 text-xs font-semibold flex items-center gap-2.5 transition-all duration-300 translate-y-2 opacity-0';
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-[#00a389]"></span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 2600);
+    }
+
+    // Initialize Application on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderAll();
+    });
+  </script>
+</body>
+</html>

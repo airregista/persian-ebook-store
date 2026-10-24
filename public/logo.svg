@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Upper Sweeping Circular Orbit Arcs -->
+  <path d="M 86.9 273.8 A 170 170 0 0 1 186.9 100.7" stroke="#044e42" stroke-width="28" stroke-linecap="round"/>
+  <path d="M 325.1 100.7 A 170 170 0 0 1 425.1 273.8" stroke="#00a389" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- Lower Layer 2: Outer Open Book Cradle Wings (Deep Emerald) -->
+  <path d="M 103.5 359.0 C 154.0 356.0 206.0 374.0 246.0 412.0 L 246.0 440.0 C 181.0 434.0 123.0 398.0 95.0 371.0 C 90.5 366.5 95.5 359.5 103.5 359.0 Z" fill="#044e42"/>
+  <path d="M 408.5 359.0 C 358.0 356.0 306.0 374.0 266.0 412.0 L 266.0 440.0 C 331.0 434.0 389.0 398.0 417.0 371.0 C 421.5 366.5 416.5 359.5 408.5 359.0 Z" fill="#044e42"/>
+
+  <!-- Lower Layer 1: Inner Open Book Pages Curving Upward (Vibrant Persian Teal) -->
+  <path d="M 84.0 309.0 C 144.0 296.0 204.0 314.0 246.0 354.0 L 246.0 388.0 C 202.0 350.0 146.0 334.0 87.0 338.0 C 76.5 338.5 73.5 311.5 84.0 309.0 Z" fill="#00a389"/>
+  <path d="M 428.0 309.0 C 368.0 296.0 308.0 314.0 266.0 354.0 L 266.0 388.0 C 310.0 350.0 366.0 334.0 425.0 338.0 C 435.5 338.5 438.5 311.5 428.0 309.0 Z" fill="#00a389"/>
+
+  <!-- 5 Harmonic Pill-Shaped Vertical Soundwave Bars -->
+  <rect x="138" y="184" width="28" height="84" rx="14" fill="#044e42"/>
+  <rect x="190" y="132" width="28" height="152" rx="14" fill="#00a389"/>
+  <rect x="242" y="72" width="28" height="248" rx="14" fill="#f59e0b"/>
+  <rect x="294" y="132" width="28" height="152" rx="14" fill="#00a389"/>
+  <rect x="346" y="184" width="28" height="84" rx="14" fill="#044e42"/>
+</svg>

@@ -25,6 +25,7 @@ Base Commit SHA: `293041b` (Plans 001-007) / `6e1c9c6` (Plans 008-013)
 | [012](012-replace-raw-html-elements-with-shadcn-primitives.md) | جایگزینی تگ‌های خام HTML با کامپوننت‌های رسمی Shadcn/UI | P1 | M | 008, 009, 011 | DONE |
 | [013](013-agent-guidelines-and-architectural-rules.md) | تدوین قوانین و اصول راهنمای ایجنت‌ها به زبان انگلیسی در agent.md | P1 | S | — | DONE |
 | [014](014-comprehensive-gitignore-configuration.md) | توسعه و جامع‌سازی فایل gitignore. برای Next.js 16، IDEها، کش بیلد و سیستم‌عامل | P2 | S | — | DONE |
+| [015](015-replace-generic-lucide-logo-with-brand-vector-mark.md) | جایگزینی آیکون جنریک لوکاید با وکتور لوگوی اختصاصی و مینیمال کتابگرد | P1 | S | — | DONE |
 
 **وضعیت‌ها:** `TODO` \| `IN PROGRESS` \| `DONE` \| `BLOCKED` \| `REJECTED`
 

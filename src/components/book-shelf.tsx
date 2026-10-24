@@ -41,11 +41,15 @@ export function BookShelf({
   const shelfRef = React.useRef<HTMLDivElement>(null);
 
   const scrollPrev = () => {
-    shelfRef.current?.scrollBy({ left: 300, behavior: "smooth" });
+    if (!shelfRef.current) return;
+    const isRtl = document.documentElement.dir === "rtl";
+    shelfRef.current.scrollBy({ left: isRtl ? 280 : -280, behavior: "smooth" });
   };
 
   const scrollNext = () => {
-    shelfRef.current?.scrollBy({ left: -300, behavior: "smooth" });
+    if (!shelfRef.current) return;
+    const isRtl = document.documentElement.dir === "rtl";
+    shelfRef.current.scrollBy({ left: isRtl ? -280 : 280, behavior: "smooth" });
   };
 
   const isDeals = variant === "deals";
@@ -62,8 +66,8 @@ export function BookShelf({
       )}
     >
       {/* Shelf Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           {icon ? (
             <div className="flex items-center justify-center shrink-0">
               {icon}
@@ -71,7 +75,7 @@ export function BookShelf({
           ) : (
             <div
               className={cn(
-                "w-2.5 h-6 rounded-full shrink-0",
+                "w-2 sm:w-2.5 h-5 sm:h-6 rounded-full shrink-0",
                 isDeals
                   ? "bg-deal"
                   : variant === "audio"
@@ -81,15 +85,15 @@ export function BookShelf({
             />
           )}
 
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-extrabold text-foreground">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <h2 className="text-base sm:text-xl font-extrabold text-foreground truncate">
                 {title}
               </h2>
               {badge && (
                 <span
                   className={cn(
-                    "text-xs font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1",
+                    "text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shrink-0",
                     isDeals
                       ? "bg-deal/10 text-deal"
                       : variant === "audio"
@@ -103,7 +107,7 @@ export function BookShelf({
               )}
             </div>
             {subtitle && (
-              <p className="text-xs text-muted-foreground mt-0.5">
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5 truncate hidden sm:block">
                 {subtitle}
               </p>
             )}
@@ -111,34 +115,34 @@ export function BookShelf({
         </div>
 
         {/* Right side controls / timers */}
-        <div className="flex items-center gap-3 self-end sm:self-center">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {isDeals && (
-            <div className="inline-flex items-center gap-1.5 bg-background/90 px-3 py-1.5 rounded-xl border border-deal/30 text-xs font-sans font-bold text-deal shadow-xs">
+            <div className="hidden xs:inline-flex items-center gap-1 bg-background/90 px-2 sm:px-3 py-1 rounded-xl border border-deal/30 text-[11px] sm:text-xs font-sans font-bold text-deal shadow-xs">
               <Timer className="w-3.5 h-3.5 animate-pulse text-deal shrink-0" />
-              <span>فرصت باقی‌مانده:</span>
-              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۰۸</span> :
-              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۴۲</span> :
-              <span className="bg-deal text-white px-1.5 py-0.5 rounded font-bold">۱۵</span>
+              <span className="hidden sm:inline">فرصت باقی‌مانده:</span>
+              <span className="bg-deal text-white px-1 sm:px-1.5 py-0.5 rounded font-bold text-[10px] sm:text-xs">۰۸</span>:
+              <span className="bg-deal text-white px-1 sm:px-1.5 py-0.5 rounded font-bold text-[10px] sm:text-xs">۴۲</span>:
+              <span className="bg-deal text-white px-1 sm:px-1.5 py-0.5 rounded font-bold text-[10px] sm:text-xs">۱۵</span>
             </div>
           )}
 
           {!isGrid && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <Button
                 variant="outline"
-                size="icon-sm"
+                size="icon-xs"
                 onClick={scrollPrev}
                 aria-label="قبلی"
-                className="shadow-xs"
+                className="size-7 rounded-full shadow-2xs border-border/70"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
               <Button
                 variant="outline"
-                size="icon-sm"
+                size="icon-xs"
                 onClick={scrollNext}
                 aria-label="بعدی"
-                className="shadow-xs"
+                className="size-7 rounded-full shadow-2xs border-border/70"
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>

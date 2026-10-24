@@ -7,6 +7,11 @@ import type { Book } from "@/types/book";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export interface BookCardProps {
   book: Book;
@@ -51,7 +56,7 @@ export const BookCard = React.memo(function BookCard({
       className={cn(
         "group relative flex flex-col justify-between rounded-2xl border border-border bg-card p-3 text-card-foreground card-shadow transition-all text-right cursor-pointer select-none",
         variant === "carousel"
-          ? "w-[190px] sm:w-[210px] min-w-[190px] sm:min-w-[210px] max-w-[210px] shrink-0"
+          ? "w-[165px] xs:w-[185px] sm:w-[210px] min-w-[165px] xs:min-w-[185px] sm:min-w-[210px] max-w-[210px] shrink-0"
           : "w-full",
         className
       )}
@@ -116,19 +121,26 @@ export const BookCard = React.memo(function BookCard({
 
         {/* Book Info */}
         <div className="space-y-1">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span className="truncate max-w-[110px]">{book.categoryName}</span>
-            <span className="flex items-center gap-0.5 font-bold text-gold">
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground gap-1">
+            <span className="truncate flex-1">{book.categoryName}</span>
+            <span className="flex items-center gap-0.5 font-bold text-gold shrink-0">
               <Star className="h-3 w-3 fill-gold text-gold" />
               <span>{toPersianDigits(book.rating.toFixed(1))}</span>
             </span>
           </div>
 
-          <h3 className="line-clamp-1 text-xs sm:text-sm font-bold text-foreground transition-colors group-hover:text-primary">
-            {book.title}
-          </h3>
+          <Tooltip>
+            <TooltipTrigger className="w-full text-right cursor-pointer outline-none">
+              <h3 className="line-clamp-2 text-xs sm:text-sm font-bold text-foreground transition-colors group-hover:text-primary leading-tight min-h-[2rem]">
+                {book.title}
+              </h3>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="font-semibold text-xs">{book.title}</p>
+            </TooltipContent>
+          </Tooltip>
 
-          <p className="truncate text-[11px] font-medium text-muted-foreground">
+          <p className="truncate text-[11px] font-medium text-muted-foreground" title={book.author}>
             {book.author}
           </p>
         </div>

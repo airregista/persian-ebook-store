@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { BookMarked, Send, ShieldCheck, Headphones } from "lucide-react";
+import { Send, ShieldCheck, Headphones } from "lucide-react";
+import { KetabgardLogo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -38,8 +39,8 @@ export function Footer({
           {/* Col 1: Brand & Bio */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shadow-xs">
-                <BookMarked className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-white dark:bg-card border border-border shadow-xs flex items-center justify-center p-1.5">
+                <KetabgardLogo size={24} />
               </div>
               <span className="text-2xl font-black text-foreground">کتابگَرد</span>
             </div>

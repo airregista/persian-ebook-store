@@ -4,6 +4,11 @@ import * as React from "react";
 import type { Book } from "@/types/book";
 import { formatToman } from "@/lib/formatters";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export interface BookListItemProps {
   book: Book;
@@ -45,13 +50,19 @@ export function BookListItem({
           {book.categoryName}
         </span>
 
-        <h4
-          onClick={() => onSelect(book.id)}
-          className="text-xs sm:text-sm font-bold text-foreground line-clamp-1 cursor-pointer hover:text-primary transition-colors"
-          title={book.title}
-        >
-          {book.title}
-        </h4>
+        <Tooltip>
+          <TooltipTrigger className="w-full text-right cursor-pointer outline-none">
+            <h4
+              onClick={() => onSelect(book.id)}
+              className="text-xs sm:text-sm font-bold text-foreground line-clamp-2 cursor-pointer hover:text-primary transition-colors leading-tight"
+            >
+              {book.title}
+            </h4>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p className="font-semibold text-xs">{book.title}</p>
+          </TooltipContent>
+        </Tooltip>
 
         {subtitle ? (
           subtitle

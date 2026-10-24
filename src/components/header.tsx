@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  BookMarked,
   LayoutGrid,
   ChevronDown,
   Search,
@@ -16,6 +15,7 @@ import {
   Palette,
   Sparkles,
 } from "lucide-react";
+import { KetabgardLogo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Input } from "@/components/ui/input";
 import { toPersianDigits } from "@/lib/formatters";
@@ -95,22 +95,29 @@ export function Header({
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Top Announcement Banner */}
-      <div className="bg-gradient-to-r from-teal-700 via-primary to-emerald-600 text-white text-xs py-2 px-4 text-center font-medium flex items-center justify-center gap-2 sm:gap-3 transition-colors">
-        <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full text-[11px] font-bold">
+      <div
+        onClick={onOpenSubscription}
+        className={cn(
+          "bg-gradient-to-r from-teal-700 via-primary to-emerald-600 text-white text-xs py-1.5 sm:py-2 px-3 sm:px-4 text-center font-medium flex items-center justify-center gap-1.5 sm:gap-3 transition-colors",
+          onOpenSubscription && "cursor-pointer select-none"
+        )}
+      >
+        <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold shrink-0">
           <Sparkles className="w-3.5 h-3.5 text-amber-300" />
           <span>جشنواره پاییزه</span>
         </span>
-        <span className="truncate max-w-[280px] sm:max-w-none">
+        {/* Mobile short message */}
+        <span className="sm:hidden text-[11px] font-medium">
+          ۳۰ روز مطالعه نامحدود فقط با ۸۹٬۰۰۰ تومان
+        </span>
+        {/* Desktop full message */}
+        <span className="hidden sm:inline text-xs">
           جشنواره بزرگ مطالعه پاییزه کتابگرد | ۳۰ روز دسترسی نامحدود به بیش از ۴۰٬۰۰۰ عنوان متنی و صوتی فقط با ۸۹٬۰۰۰ تومان
         </span>
         {onOpenSubscription && (
-          <button
-            type="button"
-            onClick={onOpenSubscription}
-            className="underline hover:text-white/80 font-bold mr-1 text-[11px] hidden sm:inline cursor-pointer"
-          >
+          <span className="underline hover:text-white/80 font-bold text-[10px] sm:text-[11px] shrink-0">
             مشاهده جزئیات
-          </button>
+          </span>
         )}
       </div>
 
@@ -129,8 +136,8 @@ export function Header({
                 }}
                 className="flex items-center gap-2.5 group"
               >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-teal-400 flex items-center justify-center text-primary-foreground shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-                  <BookMarked className="w-6 h-6" />
+                <div className="w-10 h-10 rounded-xl bg-white dark:bg-card border border-border shadow-xs flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+                  <KetabgardLogo size={28} />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-2xl font-black tracking-tight text-foreground">

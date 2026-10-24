@@ -64,11 +64,23 @@ export function CategoryNav({
   };
 
   const scrollRight = () => {
-    scrollContainerRef.current?.scrollBy({ left: 240, behavior: "smooth" });
+    // In RTL layout: scrolling rightwards moves back to earlier categories
+    if (!scrollContainerRef.current) return;
+    const isRtl = document.documentElement.dir === "rtl";
+    scrollContainerRef.current.scrollBy({
+      left: isRtl ? 220 : -220,
+      behavior: "smooth",
+    });
   };
 
   const scrollLeft = () => {
-    scrollContainerRef.current?.scrollBy({ left: -240, behavior: "smooth" });
+    // In RTL layout: scrolling leftwards moves ahead to further categories
+    if (!scrollContainerRef.current) return;
+    const isRtl = document.documentElement.dir === "rtl";
+    scrollContainerRef.current.scrollBy({
+      left: isRtl ? -220 : 220,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -76,16 +88,16 @@ export function CategoryNav({
       aria-label="دسته‌بندی‌های موضوعی کتابگرد"
       className="relative w-full border-y border-border py-2 bg-background/80 backdrop-blur-md transition-colors"
     >
-      <div className="relative flex items-center max-w-7xl mx-auto px-1 sm:px-2 gap-1.5">
-        {/* Right scroll button (for RTL navigation) */}
+      <div className="relative flex items-center max-w-7xl mx-auto px-1 sm:px-2 gap-1">
+        {/* Right scroll button (visible on mobile and desktop) */}
         <Button
           type="button"
-          variant="ghost"
+          variant="outline"
           size="icon-xs"
           onClick={scrollRight}
           aria-label="مشاهده دسته‌های قبل"
           title="مشاهده دسته‌های قبل"
-          className="hidden sm:inline-flex rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 size-7 shrink-0 cursor-pointer shadow-2xs"
+          className="rounded-full text-muted-foreground hover:text-foreground hover:bg-muted size-7 shrink-0 cursor-pointer shadow-2xs border-border/60"
         >
           <ChevronRight className="w-4 h-4" />
         </Button>
@@ -93,7 +105,7 @@ export function CategoryNav({
         {/* Scrollable container with fully hidden browser scrollbar */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 flex items-center gap-2 overflow-x-auto py-1 px-1 scroll-smooth select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex-1 flex items-center gap-1.5 sm:gap-2 overflow-x-auto py-1 px-1 scroll-smooth select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {CATEGORIES.map((item) => {
             const isActive = selectedCategory === item.id;
@@ -109,7 +121,7 @@ export function CategoryNav({
                 size="sm"
                 onClick={() => handleClick(item)}
                 className={cn(
-                  "h-8 rounded-full px-3.5 text-xs font-semibold gap-1.5 shrink-0 transition-all cursor-pointer border",
+                  "h-8 rounded-full px-3 text-xs font-semibold gap-1.5 shrink-0 transition-all cursor-pointer border",
                   isActive
                     ? "border-primary bg-primary text-primary-foreground font-bold shadow-xs hover:bg-primary-hover"
                     : "border-border/50 bg-secondary/70 hover:bg-secondary text-secondary-foreground hover:border-border",
@@ -125,15 +137,15 @@ export function CategoryNav({
           })}
         </div>
 
-        {/* Left scroll button (for RTL navigation) */}
+        {/* Left scroll button (visible on mobile and desktop) */}
         <Button
           type="button"
-          variant="ghost"
+          variant="outline"
           size="icon-xs"
           onClick={scrollLeft}
           aria-label="مشاهده دسته‌های بعد"
           title="مشاهده دسته‌های بعد"
-          className="hidden sm:inline-flex rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 size-7 shrink-0 cursor-pointer shadow-2xs"
+          className="rounded-full text-muted-foreground hover:text-foreground hover:bg-muted size-7 shrink-0 cursor-pointer shadow-2xs border-border/60"
         >
           <ChevronLeft className="w-4 h-4" />
         </Button>

@@ -69,13 +69,13 @@ export function AudioPlayer() {
           </div>
           <div className="min-w-0 flex-1 space-y-0.5 text-right">
             <h4
-              className="font-bold text-sm truncate text-foreground leading-tight"
+              className="font-bold text-xs sm:text-sm line-clamp-1 sm:line-clamp-2 text-foreground leading-tight"
               title={currentBook.title}
             >
               {currentBook.title}
             </h4>
             <p
-              className="text-xs text-muted-foreground truncate"
+              className="text-[11px] sm:text-xs text-muted-foreground truncate"
               title={narratorOrAuthor}
             >
               {narratorOrAuthor}
