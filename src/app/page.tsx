@@ -7,6 +7,10 @@ import { CategoryNav } from "@/components/category-nav";
 import { BookShelf } from "@/components/book-shelf";
 import { BookCard } from "@/components/book-card";
 import { Footer } from "@/components/footer";
+import { BookDetailDialog } from "@/components/book-detail-dialog";
+import { CheckoutDialog } from "@/components/checkout-dialog";
+import { LibraryDialog } from "@/components/library-dialog";
+import { useBookStorage } from "@/hooks/use-book-storage";
 import { MOCK_BOOKS } from "@/lib/mock-books";
 import { toPersianDigits } from "@/lib/formatters";
 import type { Book } from "@/types/book";
@@ -26,8 +30,28 @@ export default function Home() {
   const [books, setBooks] = React.useState<Book[]>(MOCK_BOOKS);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("all");
-  const [wishlist, setWishlist] = React.useState<string[]>(["2"]);
-  const [purchased, setPurchased] = React.useState<string[]>(["1"]);
+
+  // Local storage management for Wishlist & Purchased Books
+  const {
+    wishlistIds,
+    purchasedIds,
+    wishlistCount,
+    purchasedCount,
+    toggleWishlist,
+    purchaseBook,
+    isWishlisted,
+    isPurchased,
+  } = useBookStorage();
+
+  // Dialog States
+  const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = React.useState(false);
+
+  const [checkoutBook, setCheckoutBook] = React.useState<Book | null>(null);
+  const [isCheckoutOpen, setIsCheckoutOpen] = React.useState(false);
+
+  const [isLibraryOpen, setIsLibraryOpen] = React.useState(false);
+  const [libraryTab, setLibraryTab] = React.useState<"purchased" | "wishlist">("purchased");
 
   // Fetch updated books from API on mount
   React.useEffect(() => {
@@ -43,34 +67,50 @@ export default function Home() {
       });
   }, []);
 
-  const handleToggleWishlist = (id: string) => {
-    setWishlist((prev) => {
-      const exists = prev.includes(id);
-      const next = exists ? prev.filter((item) => item !== id) : [...prev, id];
-      toast.success(
-        exists ? "از علاقه‌مندی‌ها حذف شد" : "به لیست علاقه‌مندی‌ها اضافه شد"
-      );
-      return next;
-    });
-  };
-
   const handleSelectBook = (id: string) => {
     const book = books.find((b) => b.id === id);
     if (book) {
-      toast.info(`کتاب «${book.title}» انتخاب شد`, {
-        description: "مشاهده جزئیات کامل در گام بعدی (پلان ۰۰۴)",
-      });
+      setSelectedBook(book);
+      setIsDetailOpen(true);
     }
   };
 
+  const handleOpenWishlist = () => {
+    setLibraryTab("wishlist");
+    setIsLibraryOpen(true);
+  };
+
+  const handleOpenLibrary = () => {
+    setLibraryTab("purchased");
+    setIsLibraryOpen(true);
+  };
+
+  const handlePurchaseBook = (book: Book) => {
+    purchaseBook(book.id);
+    setIsDetailOpen(false);
+    setCheckoutBook(book);
+    setIsCheckoutOpen(true);
+  };
+
+  const handleOpenReader = (book: Book) => {
+    const isAudio = book.type === "audio" || (book.duration && book.duration !== "صوتی ندارد");
+    toast.info(
+      isAudio
+        ? `ورود به پلیر کتاب صوتی «${book.title}»`
+        : `ورود به کتابخوان دیجیتال برای «${book.title}»`,
+      {
+        description: "کتابخوان و پخش صوتی آنلاین در گام بعدی (پلان ۰۰۵) پیاده‌سازی خواهد شد.",
+      }
+    );
+  };
+
   const handleQuickAction = (id: string) => {
-    if (purchased.includes(id)) {
-      toast.info("باز کردن کتابخوان تحت‌وب", {
-        description: "مطالعه آنلاین در گام بعدی (پلان ۰۰۵)",
-      });
+    const book = books.find((b) => b.id === id);
+    if (!book) return;
+    if (isPurchased(id)) {
+      handleOpenReader(book);
     } else {
-      setPurchased((prev) => [...prev, id]);
-      toast.success("کتاب به کتابخانه شما افزوده شد");
+      handlePurchaseBook(book);
     }
   };
 
@@ -140,14 +180,10 @@ export default function Home() {
           setSelectedCategory(cat);
           setSearchQuery("");
         }}
-        wishlistCount={wishlist.length}
-        libraryCount={purchased.length}
-        onOpenWishlist={() =>
-          toast.info(`شما ${toPersianDigits(wishlist.length)} کتاب در لیست علاقه‌مندی دارید`)
-        }
-        onOpenLibrary={() =>
-          toast.info(`شما ${toPersianDigits(purchased.length)} کتاب خریداری‌شده در کتابخانه دارید`)
-        }
+        wishlistCount={wishlistCount}
+        libraryCount={purchasedCount}
+        onOpenWishlist={handleOpenWishlist}
+        onOpenLibrary={handleOpenLibrary}
         onOpenSubscription={() =>
           toast.info("جشنواره اشتراک طلایی کتابگرد - تخفیف ۵۰٪")
         }
@@ -188,9 +224,9 @@ export default function Home() {
                     book={book}
                     variant="standard"
                     onSelectBook={handleSelectBook}
-                    isWishlisted={wishlist.includes(book.id)}
-                    isPurchased={purchased.includes(book.id)}
-                    onToggleWishlist={handleToggleWishlist}
+                    isWishlisted={isWishlisted(book.id)}
+                    isPurchased={isPurchased(book.id)}
+                    onToggleWishlist={toggleWishlist}
                     onQuickAction={handleQuickAction}
                   />
                 ))}
@@ -266,9 +302,9 @@ export default function Home() {
                       book={book}
                       variant="standard"
                       onSelectBook={handleSelectBook}
-                      isWishlisted={wishlist.includes(book.id)}
-                      isPurchased={purchased.includes(book.id)}
-                      onToggleWishlist={handleToggleWishlist}
+                      isWishlisted={isWishlisted(book.id)}
+                      isPurchased={isPurchased(book.id)}
+                      onToggleWishlist={toggleWishlist}
                       onQuickAction={handleQuickAction}
                     />
                   ))}
@@ -286,9 +322,9 @@ export default function Home() {
                   books={bestsellers.length > 0 ? bestsellers : books}
                   variant="default"
                   onSelectBook={handleSelectBook}
-                  wishlistIds={wishlist}
-                  purchasedIds={purchased}
-                  onToggleWishlist={handleToggleWishlist}
+                  wishlistIds={wishlistIds}
+                  purchasedIds={purchasedIds}
+                  onToggleWishlist={toggleWishlist}
                   onQuickAction={handleQuickAction}
                 />
 
@@ -301,9 +337,9 @@ export default function Home() {
                   books={specialDeals.length > 0 ? specialDeals : books}
                   variant="deals"
                   onSelectBook={handleSelectBook}
-                  wishlistIds={wishlist}
-                  purchasedIds={purchased}
-                  onToggleWishlist={handleToggleWishlist}
+                  wishlistIds={wishlistIds}
+                  purchasedIds={purchasedIds}
+                  onToggleWishlist={toggleWishlist}
                   onQuickAction={handleQuickAction}
                 />
 
@@ -316,9 +352,9 @@ export default function Home() {
                   books={audioBooks.length > 0 ? audioBooks : books}
                   variant="audio"
                   onSelectBook={handleSelectBook}
-                  wishlistIds={wishlist}
-                  purchasedIds={purchased}
-                  onToggleWishlist={handleToggleWishlist}
+                  wishlistIds={wishlistIds}
+                  purchasedIds={purchasedIds}
+                  onToggleWishlist={toggleWishlist}
                   onQuickAction={handleQuickAction}
                 />
 
@@ -349,9 +385,9 @@ export default function Home() {
                         book={book}
                         variant="standard"
                         onSelectBook={handleSelectBook}
-                        isWishlisted={wishlist.includes(book.id)}
-                        isPurchased={purchased.includes(book.id)}
-                        onToggleWishlist={handleToggleWishlist}
+                        isWishlisted={isWishlisted(book.id)}
+                        isPurchased={isPurchased(book.id)}
+                        onToggleWishlist={toggleWishlist}
                         onQuickAction={handleQuickAction}
                       />
                     ))}
@@ -374,12 +410,45 @@ export default function Home() {
         onOpenSubscription={() =>
           toast.info("طرح‌های اشتراک بی‌نهایت کتابگرد")
         }
-        onOpenLibrary={() =>
-          toast.info(`کتابخانه شما: ${toPersianDigits(purchased.length)} کتاب`)
-        }
-        onOpenWishlist={() =>
-          toast.info(`علاقه‌مندی‌های شما: ${toPersianDigits(wishlist.length)} کتاب`)
-        }
+        onOpenLibrary={handleOpenLibrary}
+        onOpenWishlist={handleOpenWishlist}
+      />
+
+      {/* Book Details Dialog */}
+      <BookDetailDialog
+        book={selectedBook}
+        open={isDetailOpen}
+        onOpenChange={setIsDetailOpen}
+        isWishlisted={selectedBook ? isWishlisted(selectedBook.id) : false}
+        isPurchased={selectedBook ? isPurchased(selectedBook.id) : false}
+        onToggleWishlist={toggleWishlist}
+        onPurchase={handlePurchaseBook}
+        onOpenReader={handleOpenReader}
+        allBooks={books}
+        onSelectBook={handleSelectBook}
+      />
+
+      {/* Checkout Celebration Dialog */}
+      <CheckoutDialog
+        book={checkoutBook}
+        open={isCheckoutOpen}
+        onOpenChange={setIsCheckoutOpen}
+        onOpenReader={handleOpenReader}
+      />
+
+      {/* My Library & Wishlist Dialog */}
+      <LibraryDialog
+        open={isLibraryOpen}
+        onOpenChange={setIsLibraryOpen}
+        activeTab={libraryTab}
+        onTabChange={setLibraryTab}
+        allBooks={books}
+        purchasedIds={purchasedIds}
+        wishlistIds={wishlistIds}
+        onSelectBook={handleSelectBook}
+        onOpenReader={handleOpenReader}
+        onPurchaseBook={handlePurchaseBook}
+        onRemoveWishlist={toggleWishlist}
       />
     </div>
   );
