@@ -16,8 +16,12 @@ import {
   Smile,
   Gift,
   LayoutGrid,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
-import { cn } from "cn";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 export interface CategoryNavProps {
   selectedCategory: string;
@@ -45,14 +49,14 @@ const CATEGORIES: CategoryItem[] = [
     label: "پیشنهاد شگفت‌انگیز",
     type: "shelf",
     shelfId: "shelf-deals",
-    icon: <Percent className="w-3.5 h-3.5 text-red-500" />,
+    icon: <Percent className="w-3.5 h-3.5" />,
   },
   {
     id: "audio",
     label: "کتاب‌های صوتی",
     type: "shelf",
     shelfId: "shelf-audio",
-    icon: <Headphones className="w-3.5 h-3.5 text-amber-500" />,
+    icon: <Headphones className="w-3.5 h-3.5" />,
   },
   {
     id: "story-foreign",
@@ -124,7 +128,7 @@ const CATEGORIES: CategoryItem[] = [
     id: "freebooks",
     label: "کتاب‌های رایگان",
     type: "category",
-    icon: <Gift className="w-3.5 h-3.5 text-emerald-500" />,
+    icon: <Gift className="w-3.5 h-3.5" />,
   },
 ];
 
@@ -133,6 +137,8 @@ export function CategoryNav({
   onSelectCategory,
   onScrollToShelf,
 }: CategoryNavProps) {
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
   const handleClick = (item: CategoryItem) => {
     if (item.type === "shelf" && item.shelfId && onScrollToShelf) {
       onScrollToShelf(item.shelfId);
@@ -141,50 +147,80 @@ export function CategoryNav({
     }
   };
 
+  const scrollRight = () => {
+    scrollContainerRef.current?.scrollBy({ left: 240, behavior: "smooth" });
+  };
+
+  const scrollLeft = () => {
+    scrollContainerRef.current?.scrollBy({ left: -240, behavior: "smooth" });
+  };
+
   return (
     <nav
       aria-label="دسته‌بندی‌های موضوعی کتابگرد"
-      className="w-full border-y border-border py-2.5 bg-background/50 backdrop-blur-xs"
+      className="relative w-full border-y border-border py-2 bg-background/80 backdrop-blur-md transition-colors"
     >
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth px-1">
-        {CATEGORIES.map((item) => {
-          const isActive = selectedCategory === item.id;
-          const isAudio = item.id === "audio";
-          const isDeals = item.id === "deals";
-          const isFree = item.id === "freebooks";
+      <div className="relative flex items-center max-w-7xl mx-auto px-1 sm:px-2 gap-1.5">
+        {/* Right scroll button (for RTL navigation) */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-xs"
+          onClick={scrollRight}
+          aria-label="مشاهده دسته‌های قبل"
+          title="مشاهده دسته‌های قبل"
+          className="hidden sm:inline-flex rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 size-7 shrink-0 cursor-pointer shadow-2xs"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </Button>
 
-          let styleClass = "";
-          if (isActive) {
-            styleClass = "bg-primary text-primary-foreground shadow-xs font-bold";
-          } else if (isAudio) {
-            styleClass =
-              "bg-amber-500/10 text-amber-700 dark:text-amber-300 hover:bg-amber-500/20";
-          } else if (isDeals) {
-            styleClass =
-              "bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20";
-          } else if (isFree) {
-            styleClass =
-              "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20";
-          } else {
-            styleClass =
-              "bg-muted/80 text-muted-foreground hover:bg-muted hover:text-foreground";
-          }
+        {/* Scrollable container with fully hidden browser scrollbar */}
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 flex items-center gap-2 overflow-x-auto py-1 px-1 scroll-smooth select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {CATEGORIES.map((item) => {
+            const isActive = selectedCategory === item.id;
+            const isAudio = item.id === "audio";
+            const isDeals = item.id === "deals";
+            const isFree = item.id === "freebooks";
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleClick(item)}
-              className={cn(
-                "px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer select-none shrink-0",
-                styleClass
-              )}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
+            return (
+              <Button
+                key={item.id}
+                type="button"
+                variant={isActive ? "default" : "secondary"}
+                size="sm"
+                onClick={() => handleClick(item)}
+                className={cn(
+                  "h-8 rounded-full px-3.5 text-xs font-semibold gap-1.5 shrink-0 transition-all cursor-pointer border",
+                  isActive
+                    ? "border-primary bg-primary text-primary-foreground font-bold shadow-xs hover:bg-primary-hover"
+                    : "border-border/50 bg-secondary/70 hover:bg-secondary text-secondary-foreground hover:border-border",
+                  !isActive && isDeals && "border-deal/30 text-deal hover:bg-destructive/10 hover:border-deal/50",
+                  !isActive && isAudio && "border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50",
+                  !isActive && isFree && "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/50"
+                )}
+              >
+                <span className="shrink-0">{item.icon}</span>
+                <span className="whitespace-nowrap">{item.label}</span>
+              </Button>
+            );
+          })}
+        </div>
+
+        {/* Left scroll button (for RTL navigation) */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-xs"
+          onClick={scrollLeft}
+          aria-label="مشاهده دسته‌های بعد"
+          title="مشاهده دسته‌های بعد"
+          className="hidden sm:inline-flex rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/80 size-7 shrink-0 cursor-pointer shadow-2xs"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </Button>
       </div>
     </nav>
   );
