@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --primary: #00a389;
+  --primary-foreground: #ffffff;
+  --primary-hover: #008772;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f0fdfa;
+  --accent-foreground: #0f766e;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #00a389;
+  --radius: 0.75rem;
+
+  --gold: #f59e0b;
+  --gold-foreground: #ffffff;
+  --coral: #ff5722;
+  --deal: #ef4444;
+
+  --reader-sepia-bg: #fbf0d9;
+  --reader-sepia-fg: #5f4b32;
+  --reader-dark-bg: #18181b;
+  --reader-dark-fg: #e4e4e7;
+}
+
+.dark {
+  --background: #090d16;
+  --foreground: #f8fafc;
+  --card: #131c2e;
+  --card-foreground: #f8fafc;
+  --popover: #131c2e;
+  --popover-foreground: #f8fafc;
+  --primary: #14b8a6;
+  --primary-foreground: #042f2e;
+  --primary-hover: #2dd4bf;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #115e59;
+  --accent-foreground: #ccfbf1;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fef2f2;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #14b8a6;
+
+  --gold: #fbbf24;
+  --gold-foreground: #451a03;
+  --coral: #ff7043;
+  --deal: #f87171;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-coral: var(--coral);
+  --color-deal: var(--deal);
+
+  --color-reader-sepia-bg: var(--reader-sepia-bg);
+  --color-reader-sepia-fg: var(--reader-sepia-fg);
+  --color-reader-dark-bg: var(--reader-dark-bg);
+  --color-reader-dark-fg: var(--reader-dark-fg);
+
+  --font-sans: var(--font-vazirmatn), sans-serif;
+  --radius-xl: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.card-shadow {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.card-shadow:hover {
+  box-shadow: 0 12px 24px -6px rgba(0, 163, 137, 0.16), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+}
+.dark .card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.dark .card-shadow:hover {
+  box-shadow: 0 12px 28px -4px rgba(20, 184, 166, 0.2);
+  transform: translateY(-3px);
 }
