@@ -1,6 +1,8 @@
 import type { Book, BookReview } from '@/types/book';
 import { MOCK_BOOKS, MOCK_SHELVES, getMockBookReviews } from '@/lib/mock-books';
+import rawCatalog from './fidibo-catalog.json';
 
+const FIDIBO_CATALOG = rawCatalog as Book[];
 const FIDIBO_API_BASE = process.env.FIDIBO_API_BASE || 'https://api.fidibo.com';
 const TIMEOUT_MS = 5000;
 
@@ -234,7 +236,8 @@ export async function searchFidibo(query: string, kind?: string): Promise<Book[]
     // Network or timeout failure gracefully falls back to mock data
   }
 
-  return MOCK_BOOKS.filter((book) => {
+  const catalogPool = FIDIBO_CATALOG.length > 0 ? FIDIBO_CATALOG : MOCK_BOOKS;
+  return catalogPool.filter((book) => {
     const matchesQuery =
       !normalizedQuery ||
       book.title.toLowerCase().includes(normalizedQuery) ||
@@ -275,7 +278,9 @@ export async function getFidiboBookDetails(
     // Network failure gracefully falls back to mock data
   }
 
-  const book = MOCK_BOOKS.find((b) => b.id === idStr || b.slug === idStr);
+  const book =
+    FIDIBO_CATALOG.find((b) => b.id === idStr || b.slug === idStr) ||
+    MOCK_BOOKS.find((b) => b.id === idStr || b.slug === idStr);
   if (!book) return null;
 
   return {
@@ -312,18 +317,31 @@ export async function getFidiboBooks(shelf?: string, category?: string): Promise
     const foundShelf = MOCK_SHELVES.find((s) => s.id === shelf);
     if (foundShelf) return foundShelf.books;
 
-    if (shelf === 'special-deals') return MOCK_BOOKS.filter((b) => b.isSpecialDeal);
-    if (shelf === 'audio-books') return MOCK_BOOKS.filter((b) => b.type === 'audio');
-    if (shelf === 'best-sellers') return [MOCK_BOOKS[0], MOCK_BOOKS[1], MOCK_BOOKS[4], MOCK_BOOKS[7]];
+    if (shelf === 'special-deals') {
+      const deals = FIDIBO_CATALOG.filter((b) => b.isSpecialDeal || b.discountPercent >= 40);
+      return deals.length > 0 ? deals : MOCK_BOOKS.filter((b) => b.isSpecialDeal);
+    }
+    if (shelf === 'audio-books') {
+      const audios = FIDIBO_CATALOG.filter((b) => b.type === 'audio' || b.category === 'audio');
+      return audios.length > 0 ? audios : MOCK_BOOKS.filter((b) => b.type === 'audio');
+    }
+    if (shelf === 'best-sellers') {
+      const popular = FIDIBO_CATALOG.filter((b) => b.rating >= 4.0 && b.ratingsCount > 100);
+      return popular.length > 0 ? popular.slice(0, 30) : MOCK_BOOKS.slice(0, 15);
+    }
   }
 
-  // Category-specific mock matching
-  if (category) {
-    const filtered = MOCK_BOOKS.filter(
+  // Category-specific catalog matching (guarantees 100+ books per category)
+  if (category && category !== 'all') {
+    const filtered = FIDIBO_CATALOG.filter(
       (b) => b.category.toLowerCase() === category.toLowerCase() || b.categoryName === category
     );
     if (filtered.length > 0) return filtered;
+    const mockFiltered = MOCK_BOOKS.filter(
+      (b) => b.category.toLowerCase() === category.toLowerCase() || b.categoryName === category
+    );
+    if (mockFiltered.length > 0) return mockFiltered;
   }
 
-  return MOCK_BOOKS;
+  return FIDIBO_CATALOG.length > 0 ? FIDIBO_CATALOG : MOCK_BOOKS;
 }

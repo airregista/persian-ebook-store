@@ -23,11 +23,20 @@ import { EbookReader } from "@/components/reader/ebook-reader";
 import { usePlayer } from "@/context/player-context";
 
 const CATEGORY_NAMES: Record<string, string> = {
-  literature: "ادبیات، داستان و رمان",
-  society: "روانشناسی، رشد فردی و موفقیت",
-  philosophy: "فلسفه، منطق و جامعه‌شناسی",
-  art: "مدیریت، طراحی و هنر",
+  all: "همه دسته‌ها",
+  "story-foreign": "داستان و رمان خارجی",
+  "story-persian": "داستان و رمان فارسی",
+  psychology: "روانشناسی، خودشناسی و رشد فردی",
+  management: "مدیریت، بازاریابی و کسب‌وکار",
+  philosophy: "فلسفه، اندیشه و منطق",
+  history: "تاریخ جهان، ایران و زندگی‌نامه‌ها",
+  "social-sciences": "جامعه‌شناسی، اقتصاد و علوم اجتماعی",
   audio: "کتاب‌های صوتی و پادکست",
+  literature: "شعر و ادبیات کلاسیک",
+  lifestyle: "سبک زندگی، سلامت و تندرستی",
+  scientific: "دانش، علوم و فناوری",
+  "kid-teen": "کودک و نوجوان",
+  freebooks: "کتاب‌های رایگان و همگانی",
 };
 
 export default function Home() {
@@ -63,9 +72,14 @@ export default function Home() {
   const { playBook, currentBook } = usePlayer();
   const [readerBook, setReaderBook] = React.useState<Book | null>(null);
 
-  // Fetch updated books from API on mount
+  // Fetch updated books from API on mount and when category changes
   React.useEffect(() => {
-    fetch("/api/books")
+    const url =
+      selectedCategory !== "all"
+        ? `/api/books?category=${encodeURIComponent(selectedCategory)}`
+        : "/api/books";
+
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data.books) && data.books.length > 0) {
@@ -75,7 +89,7 @@ export default function Home() {
       .catch(() => {
         // Fallback to initial MOCK_BOOKS
       });
-  }, []);
+  }, [selectedCategory]);
 
   const handleSelectBook = (id: string) => {
     const book = books.find((b) => b.id === id);
@@ -103,6 +117,11 @@ export default function Home() {
   };
 
   const handleOpenReader = (book: Book) => {
+    // Auto-close open dialogs when reader opens
+    setIsDetailOpen(false);
+    setIsLibraryOpen(false);
+    setIsCheckoutOpen(false);
+
     const isAudio = book.type === "audio" || (book.duration && book.duration !== "صوتی ندارد");
     if (isAudio) {
       playBook(book);
@@ -154,10 +173,15 @@ export default function Home() {
     if (selectedCategory === "all") return books;
     if (selectedCategory === "audio") {
       return books.filter(
-        (b) => b.type === "audio" || (b.duration && b.duration !== "صوتی ندارد")
+        (b) => b.type === "audio" || b.category === "audio" || (b.duration && b.duration !== "صوتی ندارد")
       );
     }
-    return books.filter((b) => b.category === selectedCategory);
+    if (selectedCategory === "deals") {
+      return books.filter((b) => b.isSpecialDeal || b.discountPercent >= 40);
+    }
+    return books.filter(
+      (b) => b.category === selectedCategory || b.categoryName === selectedCategory
+    );
   }, [books, selectedCategory]);
 
   // Shelf data

@@ -46,9 +46,9 @@ const THEME_CONFIG: Record<ReaderTheme, ThemeConfig> = {
   },
   night: {
     name: "شب",
-    bg: "bg-[#18181b]",
-    text: "text-[#e4e4e7]",
-    headerBg: "bg-[#18181b]/95",
+    bg: "bg-[#141416]",
+    text: "text-[#f4f4f5]",
+    headerBg: "bg-[#141416]/95",
     border: "border-zinc-800",
     mutedText: "text-zinc-400",
     cardBg: "bg-zinc-900 border-zinc-800",
@@ -362,7 +362,7 @@ export function EbookReader({ book, onClose }: EbookReaderProps) {
                   <p
                     key={paraIdx}
                     style={{ fontSize: `${fontSize}px`, lineHeight: 2 }}
-                    className="text-justify indent-6 tracking-normal transition-all duration-150 text-foreground/95"
+                    className="text-justify indent-6 tracking-normal transition-all duration-150 text-inherit opacity-95"
                   >
                     {para}
                   </p>

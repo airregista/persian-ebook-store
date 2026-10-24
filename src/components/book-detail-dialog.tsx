@@ -80,14 +80,14 @@ export function BookDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-border bg-card">
+      <DialogContent className="w-[95vw] sm:max-w-2xl md:max-w-3xl max-h-[92vh] overflow-hidden flex flex-col p-0 gap-0 border-border bg-card shadow-2xl rounded-2xl">
         {/* Scrollable Dialog Body */}
-        <div className="overflow-y-auto p-5 sm:p-7 space-y-6 flex-1 text-right">
+        <div className="overflow-y-auto p-4 sm:p-6 space-y-6 flex-1 text-right">
           {/* Header Section */}
           <DialogHeader className="gap-4 text-right">
-            <div className="flex flex-col sm:flex-row gap-5 items-start">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start text-center sm:text-right">
               {/* Cover Image */}
-              <div className="relative w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden bg-muted shadow-md shrink-0 self-center sm:self-start">
+              <div className="relative w-32 sm:w-36 aspect-[3/4] rounded-xl overflow-hidden bg-muted shadow-md shrink-0">
                 {!isImgError ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -112,7 +112,7 @@ export function BookDetailDialog({
 
               {/* Header Info */}
               <div className="flex-1 space-y-2.5">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                   <Badge variant="secondary" className="text-xs font-bold">
                     {book.categoryName}
                   </Badge>
@@ -138,7 +138,11 @@ export function BookDetailDialog({
                   {book.title}
                 </DialogTitle>
 
-                <DialogDescription className="text-sm text-muted-foreground space-y-1">
+                <DialogDescription className="sr-only">
+                  {book.title} اثر {book.author} - مشخصات، معرفی و دیدگاه‌ها در کتابگرد
+                </DialogDescription>
+
+                <div className="text-sm text-muted-foreground space-y-1">
                   <div>
                     پدیدآور: <span className="font-semibold text-foreground">{book.author}</span>
                   </div>
@@ -155,10 +159,10 @@ export function BookDetailDialog({
                   <div>
                     ناشر: <span className="font-semibold text-foreground">{book.publisher}</span>
                   </div>
-                </DialogDescription>
+                </div>
 
                 {/* Rating & Score Distribution */}
-                <div className="flex items-center gap-4 pt-1">
+                <div className="flex items-center justify-center sm:justify-start gap-4 pt-1">
                   <div className="flex items-center gap-1.5 bg-amber-500/10 px-3 py-1 rounded-lg text-amber-600 dark:text-amber-400 font-bold text-sm">
                     <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                     <span>{toPersianDigits(book.rating.toFixed(1))}</span>
@@ -174,7 +178,7 @@ export function BookDetailDialog({
 
           {/* Tabs Section */}
           <Tabs defaultValue="about" className="w-full mt-4">
-            <TabsList className="w-full justify-start border-b rounded-none bg-transparent p-0 h-auto gap-4">
+            <TabsList className="w-full justify-start border-b rounded-none bg-transparent p-0 h-auto gap-2 sm:gap-4 overflow-x-auto no-scrollbar">
               <TabsTrigger
                 value="about"
                 className="rounded-none border-b-2 border-transparent data-[active]:border-primary data-[active]:text-primary pb-2.5 pt-1 px-3 text-sm font-bold bg-transparent shadow-none"
@@ -422,7 +426,10 @@ export function BookDetailDialog({
           {isPurchased ? (
             <Button
               type="button"
-              onClick={() => onOpenReader?.(book)}
+              onClick={() => {
+                onOpenChange(false);
+                onOpenReader?.(book);
+              }}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 text-xs sm:text-sm px-5 py-2.5 shadow-sm cursor-pointer"
             >
               {isAudio ? (

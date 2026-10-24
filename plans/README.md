@@ -17,6 +17,7 @@ Base Commit SHA: `293041b`
 | [004](004-book-details-reviews-and-purchase-flow.md) | مودال جزئیات کتاب، نظرات، علاقه‌مندی‌ها و فرآیند خرید لوکال | P1 | M | 003 | DONE |
 | [005](005-ebook-reader-and-audiobook-player.md) | کتابخوان تعاملی درون‌مرورگر (E-book) و پخش‌کننده صوتی (Player) | P1 | L | 004 | DONE |
 | [006](006-subscription-showcase-and-a11y-audit.md) | صفحه پلن‌های اشتراک کتابگرد، بررسی دسترسی‌پذیری و کنترل نهایی | P2 | S | 005 | DONE |
+| [007](007-audio-player-timeline-and-book-dialog-polish.md) | اصلاح نوار پیشرفت پخش صوتی و بازطراحی دیالوگ با کامپوننت‌های Shadcn/UI | P1 | S | 004, 005 | DONE |
 
 **وضعیت‌ها:** `TODO` \| `IN PROGRESS` \| `DONE` \| `BLOCKED` \| `REJECTED`
 

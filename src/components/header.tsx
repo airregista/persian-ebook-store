@@ -150,27 +150,45 @@ export function Header({
 
                 {/* Category Flyout Menu */}
                 {isCategoryOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-72 bg-popover text-popover-foreground rounded-2xl shadow-xl border border-border p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="absolute top-full right-0 mt-2 w-80 max-h-[80vh] overflow-y-auto bg-popover text-popover-foreground rounded-2xl shadow-xl border border-border p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="text-[11px] font-bold text-muted-foreground px-3 py-1.5 uppercase">
-                      موضوعات پرطرفدار
+                      موضوعات و دسته‌بندی‌ها
                     </div>
 
                     <button
                       type="button"
-                      onClick={() => handleCategoryClick("literature")}
+                      onClick={() => handleCategoryClick("story-foreign")}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
                     >
                       <Book className="w-4 h-4 text-primary" />
-                      <span>ادبیات، داستان و رمان</span>
+                      <span>داستان و رمان خارجی</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => handleCategoryClick("society")}
+                      onClick={() => handleCategoryClick("story-persian")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Book className="w-4 h-4 text-primary" />
+                      <span>داستان و رمان فارسی</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("psychology")}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
                     >
                       <Brain className="w-4 h-4 text-primary" />
-                      <span>روانشناسی، رشد فردی و موفقیت</span>
+                      <span>روانشناسی و تحول فردی</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("management")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Palette className="w-4 h-4 text-primary" />
+                      <span>مدیریت و کسب‌وکار</span>
                     </button>
 
                     <button
@@ -179,16 +197,25 @@ export function Header({
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
                     >
                       <Compass className="w-4 h-4 text-primary" />
-                      <span>فلسفه، منطق و جامعه‌شناسی</span>
+                      <span>فلسفه، منطق و اندیشه</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => handleCategoryClick("art")}
+                      onClick={() => handleCategoryClick("history")}
                       className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
                     >
-                      <Palette className="w-4 h-4 text-primary" />
-                      <span>مدیریت، طراحی و هنر</span>
+                      <Book className="w-4 h-4 text-primary" />
+                      <span>تاریخ جهان و ایران</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("social-sciences")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Compass className="w-4 h-4 text-primary" />
+                      <span>جامعه‌شناسی و علوم اجتماعی</span>
                     </button>
 
                     <button
@@ -198,6 +225,42 @@ export function Header({
                     >
                       <Headphones className="w-4 h-4" />
                       <span>کتاب صوتی و پادکست</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("literature")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Book className="w-4 h-4 text-primary" />
+                      <span>شعر و ادبیات کلاسیک</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("scientific")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span>علمی، فناوری و تکنولوژی</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("kid-teen")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground rounded-xl transition-colors text-right cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span>کودک و نوجوان</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategoryClick("freebooks")}
+                      className="w-full flex items-center gap-3 px-3 py-2 text-sm text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-colors font-bold text-right cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>کتاب‌های رایگان</span>
                     </button>
                   </div>
                 )}
