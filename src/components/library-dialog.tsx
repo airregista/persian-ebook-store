@@ -17,11 +17,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { formatToman, toPersianDigits } from "@/lib/formatters";
+import { toPersianDigits } from "@/lib/formatters";
 import type { Book } from "@/types/book";
+import { BookListItem } from "@/components/book-list-item";
 
 export interface LibraryDialogProps {
   open: boolean;
@@ -117,61 +117,20 @@ export function LibraryDialog({
                   const isAudio =
                     book.type === "audio" || (book.duration && book.duration !== "صوتی ندارد");
                   return (
-                    <div
+                    <BookListItem
                       key={book.id}
-                      className="group flex gap-3.5 p-3 rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all text-right items-center"
-                    >
-                      {/* Cover Image */}
-                      <div
-                        onClick={() => {
-                          onOpenChange(false);
-                          onSelectBook(book.id);
-                        }}
-                        className="relative w-16 sm:w-18 aspect-[3/4] rounded-lg overflow-hidden bg-muted shrink-0 cursor-pointer shadow-xs group-hover:scale-105 transition-transform"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={book.cover}
-                          alt={book.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Info & Actions */}
-                      <div className="flex-1 min-w-0 space-y-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                            {book.categoryName}
-                          </Badge>
-                          {isAudio ? (
-                            <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
-                              <Headphones className="w-3 h-3" />
-                              صوتی
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-bold text-primary flex items-center gap-0.5">
-                              <BookOpen className="w-3 h-3" />
-                              متنی
-                            </span>
-                          )}
-                        </div>
-
-                        <h4
-                          onClick={() => {
-                            onOpenChange(false);
-                            onSelectBook(book.id);
-                          }}
-                          className="text-xs sm:text-sm font-bold text-foreground line-clamp-1 cursor-pointer hover:text-primary transition-colors"
-                          title={book.title}
-                        >
-                          {book.title}
-                        </h4>
-
+                      book={book}
+                      onSelect={(id) => {
+                        onOpenChange(false);
+                        onSelectBook(id);
+                      }}
+                      subtitle={
                         <p className="text-[11px] text-muted-foreground truncate">
                           {book.author}
                         </p>
-
-                        <div className="flex items-center gap-2 pt-1">
+                      }
+                      actions={
+                        <>
                           <Button
                             size="xs"
                             onClick={() => {
@@ -205,9 +164,9 @@ export function LibraryDialog({
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Button>
-                        </div>
-                      </div>
-                    </div>
+                        </>
+                      }
+                    />
                   );
                 })}
               </div>
@@ -237,50 +196,16 @@ export function LibraryDialog({
                 {wishlistBooks.map((book) => {
                   const isPurchased = purchasedIds.includes(book.id);
                   return (
-                    <div
+                    <BookListItem
                       key={book.id}
-                      className="group flex gap-3.5 p-3 rounded-2xl border border-border bg-card hover:border-red-500/30 hover:shadow-sm transition-all text-right items-center"
-                    >
-                      {/* Cover Image */}
-                      <div
-                        onClick={() => {
-                          onOpenChange(false);
-                          onSelectBook(book.id);
-                        }}
-                        className="relative w-16 sm:w-18 aspect-[3/4] rounded-lg overflow-hidden bg-muted shrink-0 cursor-pointer shadow-xs group-hover:scale-105 transition-transform"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={book.cover}
-                          alt={book.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Info & Actions */}
-                      <div className="flex-1 min-w-0 space-y-1.5">
-                        <span className="text-[10px] text-muted-foreground block truncate">
-                          {book.categoryName}
-                        </span>
-
-                        <h4
-                          onClick={() => {
-                            onOpenChange(false);
-                            onSelectBook(book.id);
-                          }}
-                          className="text-xs sm:text-sm font-bold text-foreground line-clamp-1 cursor-pointer hover:text-primary transition-colors"
-                          title={book.title}
-                        >
-                          {book.title}
-                        </h4>
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-foreground">
-                            {formatToman(book.price)}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 pt-1">
+                      book={book}
+                      onSelect={(id) => {
+                        onOpenChange(false);
+                        onSelectBook(id);
+                      }}
+                      className="hover:border-red-500/30"
+                      actions={
+                        <>
                           {isPurchased ? (
                             <Button
                               size="xs"
@@ -316,9 +241,9 @@ export function LibraryDialog({
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>
-                        </div>
-                      </div>
-                    </div>
+                        </>
+                      }
+                    />
                   );
                 })}
               </div>
